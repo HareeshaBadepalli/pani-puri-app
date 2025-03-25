@@ -1,0 +1,70 @@
+.middle-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 80vh; /* Adjust height */
+  background: linear-gradient(to right, #ff0000, #ffcc00, #ff0000); /* Enhanced vibrant gradient */
+  background-size: 400% 400%;
+  animation: gradientMove 8s infinite linear; /* Gradient animation */
+}
+
+/* Gradient background animation */
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.central-image img {
+  width: 550px;
+  height: 550px;
+  object-fit: cover;
+  border-radius: 50%; /* Make it round */
+  box-shadow: 0px 4px 20px rgba(201, 23, 23, 0.5); /* Stronger shadow effect */
+  transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+}
+
+/* Subtle hover glow effect */
+.central-image img:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 6px 25px rgba(255, 0, 0, 0.6);
+}
+
+.side {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%; /* Ensure round shape */
+  position: absolute;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+/* Hover effects for side images */
+.side:hover {
+  transform: scale(1.1) rotate(10deg);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.top-left { top: 8%; left: 27%; transform: rotate(-50deg); }
+.top-right { top: 12%; right: 27%; transform: rotate(20deg); }
+.bottom-left { bottom: 8%; left: 27%; transform: rotate(20deg); }
+.bottom-right { bottom: 8%; right: 27%; transform: rotate(50deg); }
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .central-image img {
+      width: 350px;
+      height: 350px;
+  }
+
+  .side {
+      width: 100px;
+      height: 100px;
+  }
+
+  .top-left, .top-right, .bottom-left, .bottom-right {
+      left: auto;
+      right: auto;
+      transform: none;
+  }
+}
