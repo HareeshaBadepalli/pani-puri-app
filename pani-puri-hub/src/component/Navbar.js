@@ -14,7 +14,7 @@ const Navbar = () => {
           </button>
         </li>
         <li>
-          <button onClick={() => navigate("/")} style={styles.navLinkButton}>
+          <button onClick={() => navigate("/menu")} style={styles.navLinkButton}>
             Menu
           </button>
         </li>

@@ -1,0 +1,71 @@
+/* Style the menu container */
+.menu-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  /* Grid for menu items */
+  .menu-items {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* First row will have 4 items */
+    gap: 20px;
+    justify-items: center;
+    padding: 20px;
+  }
+  
+  @media (max-width: 1200px) {
+    .menu-items {
+      grid-template-columns: repeat(3, 1fr); /* Second row with 3 items */
+    }
+  }
+  
+  /* Style for individual menu cards */
+  .menu-card {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 250px;
+  }
+  
+  /* Image size control */
+  .menu-card img {
+    width: 100%; /* Makes the image take up the width of the card */
+    max-width: 150px; /* Limits the maximum width of the image */
+    height: auto; /* Maintains the aspect ratio */
+    margin-bottom: 10px;
+    object-fit: contain; /* Ensures the image is not distorted */
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+    margin: 10px 0;
+  }
+  
+  p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 15px;
+  }
+  
+  button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  

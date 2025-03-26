@@ -1,12 +1,12 @@
 .middle-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: center; /* Horizontally center */
+  align-items: center;     /* Vertically center */
   position: relative;
-  height: 80vh; /* Adjust height */
-  background: linear-gradient(to right, #ff0000, #ffcc00, #ff0000); /* Enhanced vibrant gradient */
+  height: 80vh;
+  background: linear-gradient(to right, #ff0000, #ffcc00, #ff0000);
   background-size: 400% 400%;
-  animation: gradientMove 8s infinite linear; /* Gradient animation */
+  animation: gradientMove 8s infinite linear;
 }
 
 /* Gradient background animation */
@@ -16,55 +16,105 @@
   100% { background-position: 0% 50%; }
 }
 
+.central-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* Make sure the image is centered within the container */
 .central-image img {
-  width: 550px;
-  height: 550px;
+  width: 500px;
+  height: 500px;
   object-fit: cover;
-  border-radius: 50%; /* Make it round */
-  box-shadow: 0px 4px 20px rgba(201, 23, 23, 0.5); /* Stronger shadow effect */
+  border-radius: 50%;
+  box-shadow: 0px 4px 20px rgba(201, 23, 23, 0.5);
   transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
 }
 
-/* Subtle hover glow effect */
+/* Hover effect */
 .central-image img:hover {
   transform: scale(1.05);
   box-shadow: 0px 6px 25px rgba(255, 0, 0, 0.6);
 }
 
-.side {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%; /* Ensure round shape */
+
+/* Side Images - Container */
+.side-container {
   position: absolute;
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
 }
 
-/* Hover effects for side images */
+/* Side Image */
+.side {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  position: absolute;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  animation: floatEffect 3s infinite ease-in-out;
+}
+
+/* Adjusting Image Placement */
+.top-left  { top: 5%; left: 31%; transform: rotate(-30deg); }
+.top-right { top: 5%; right: 31%; transform: rotate(30deg); }
+.bottom-left  { bottom: 5%; left: 31%; transform: rotate(15deg); }
+.bottom-right { bottom: 5%; right: 31%; transform: rotate(-15deg); }
+
+/* Hover effects */
 .side:hover {
   transform: scale(1.1) rotate(10deg);
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.top-left { top: 8%; left: 27%; transform: rotate(-50deg); }
-.top-right { top: 12%; right: 27%; transform: rotate(20deg); }
-.bottom-left { bottom: 8%; left: 27%; transform: rotate(20deg); }
-.bottom-right { bottom: 8%; right: 27%; transform: rotate(50deg); }
+/* Floating Animation */
+@keyframes floatEffect {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
 
-/* Responsive adjustments for smaller screens */
+.navigate-button-atmiddle {
+  position: absolute; /* Position relative to the .central-image container */
+  top: 50%; /* Adjust this to position the button below the image */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Correct horizontal alignment */
+  z-index: 2; /* Ensure the button is on top of the image */
+  background-color: #007bff;
+  color: white;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navigate-button-atmiddle:hover {
+  background-color: #0056b3;
+  transform: scale(1.1) translateX(-50%); /* Slightly scale the button on hover */
+}
+
+ 
+/* Responsive Design */
 @media (max-width: 768px) {
+  .middle-container {
+    height: 70vh;
+  }
+
   .central-image img {
-      width: 350px;
-      height: 350px;
+    width: 350px;
+    height: 350px;
   }
 
   .side {
-      width: 100px;
-      height: 100px;
-  }
-
-  .top-left, .top-right, .bottom-left, .bottom-right {
-      left: auto;
-      right: auto;
-      transform: none;
+    width: 90px;
+    height: 90px;
   }
 }
