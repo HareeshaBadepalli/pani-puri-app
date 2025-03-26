@@ -11,9 +11,9 @@ const MiddleSection = () => {
 
       {/* Surrounding Images */}
       <img src="/images/pani-puri-2.png" alt="Side Pani Puri" className="side top-left" />
-      <img src="/images/pani-puri-2.png" alt="Side Pani Puri" className="side top-right" />
-      <img src="/images/pani-puri-2.png" alt="Side Pani Puri" className="side bottom-left" />
-      <img src="/images/pani-puri-2.png" alt="Side Pani Puri" className="side bottom-right" />
+      <img src="/images/pani-puri-6.png" alt="Side Pani Puri" className="side top-right" />
+      <img src="/images/pani-puri-4.png" alt="Side Pani Puri" className="side bottom-left" />
+      <img src="/images/pani-puri-5.png" alt="Side Pani Puri" className="side bottom-right" />
     </div>
   );
 };
