@@ -15,7 +15,7 @@
 /* Subtitle styling */
 .sub-title {
   text-align: center;
-  color: #2fa17b;
+  color: hsl(110, 83%, 49%);
   margin-bottom: 20px;
 }
 
@@ -47,8 +47,8 @@
   transform: translateX(-50%); /* Center the button horizontally */
   background-color: #007bff;
   color: rgb(140, 11, 11);
-  padding: 10px 20px;
-  font-size: 18px;
+  padding: 20px 40px;
+  font-size: 25px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -90,11 +90,11 @@
 .navigate-button {
   position: relative;
   padding: 20px 40px;
-  font-size: 16px;
+  font-size: 20px;
   cursor: pointer;
   border: none;
   background-color: #007bff;
-  color: #175359;
+  color: #73f550be;
   border-radius: 4px;
   transition: background-color 0.3s ease;
 }

@@ -2,12 +2,25 @@
 .menu-container {
     text-align: center;
     padding: 20px;
+    background-color:aquamarine;
   }
   
   h1 {
     font-size: 2rem;
     margin-bottom: 20px;
   }
+  
+  .heading {
+    font-size: 2.5rem; /* Adjust size */
+    font-weight: bold; /* Make it bold */
+    text-align: center; /* Center align */
+    color: rgb(32, 159, 198); /* Orange color */
+    text-transform: uppercase; /* Convert text to uppercase */
+    letter-spacing: 2px; /* Increase spacing between letters */
+    background: linear-gradient(to right, #24c5ce, #ff6600); /* Gradient text */
+    background-color: aqua;
+  }
+  
   
   /* Grid for menu items */
   .menu-items {
@@ -16,6 +29,8 @@
     gap: 20px;
     justify-items: center;
     padding: 20px;
+    color:aquamarine;
+    background: linear-gradient(to right, hsl(213, 48%, 64%), rgb(147, 250, 252)); /* Yellow to Orange */
   }
   
   @media (max-width: 1200px) {
@@ -26,12 +41,12 @@
   
   /* Style for individual menu cards */
   .menu-card {
-    border: 1px solid #ccc;
+    border: 1px solid #cfcd28;
     padding: 15px;
     border-radius: 8px;
     text-align: center;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(to right, hsl(326, 93%, 51%), hsl(92, 96%, 38%)); /* Yellow to Orange */
+    box-shadow: 0 4px 8px rgba(122, 194, 80, 0.1);
     width: 100%;
     max-width: 250px;
   }
@@ -42,6 +57,7 @@
     max-width: 150px; /* Limits the maximum width of the image */
     height: auto; /* Maintains the aspect ratio */
     margin-bottom: 10px;
+    border-radius: 45px;
     object-fit: contain; /* Ensures the image is not distorted */
   }
   
@@ -52,12 +68,12 @@
   
   p {
     font-size: 1rem;
-    color: #555;
-    margin-bottom: 15px;
+    color:aqua;
+    margin-bottom: 25px;
   }
   
   button {
-    background-color: #4CAF50;
+    background-color:blueviolet;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -66,6 +82,93 @@
   }
   
   button:hover {
-    background-color: #45a049;
+    background-color:rgb(225, 170, 18);
   }
-  
+  /* View Cart button */
+.view-cart {
+  background-color: #007bff;
+  color: rgb(243, 44, 44);
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.view-cart:hover {
+  background-color: #0056b3;
+}
+/* Align "Our Menu" to the left and "View Cart" to the right */
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+/* "View Cart" button aligned to the right */
+.view-cart {
+  background-color: #ff6600; /* Orange */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.view-cart:hover {
+  background-color: #e65c00; /* Darker orange */
+}
+
+/* Styling for (- 0 +) buttons */
+.cart-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.decrement,
+.increment {
+  background-color: #007bff; /* Blue */
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.decrement:hover,
+.increment:hover {
+  background-color: #0056b3; /* Darker blue */
+}
+
+/* Quantity display */
+.quantity {
+  font-size: 18px;
+  font-weight: bold;
+  min-width: 30px;
+  text-align: center;
+}
+
+/* Styling for "Add to Cart" button */
+.add-to-cart {
+  background-color: #28a745; /* Green */
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.add-to-cart:hover {
+  background-color: #218838; /* Darker green */
+}
