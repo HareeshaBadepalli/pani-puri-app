@@ -1,6 +1,6 @@
 /* Overall container styling */
 .items-container {
-  background-color: #f0f0f0; /* Light gray background */
+  background-color: #13b1d8; /* Light gray background */
   padding: 20px;
   min-height: 100vh;
   font-family: Arial, sans-serif;
@@ -9,22 +9,24 @@
 /* Title styling */
 .title {
   text-align: center;
-  color: #333;
+  color: #2e3797;
 }
 
 /* Subtitle styling */
 .sub-title {
   text-align: center;
-  color: #555;
+  color: #2fa17b;
   margin-bottom: 20px;
 }
 
 /* Description styling */
 .description {
-  background-color: #fff; /* White background for the theory text */
+  background-color: #b218cd; /* White background for the theory text */
   padding: 15px;
   border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(191, 235, 88, 0.1);
+  margin: 0 auto; /* Centers it */
+  width: 60%; /* Reduce width */
   margin-bottom: 20px;
   text-align: center;
 }
@@ -34,17 +36,17 @@
   margin: 0;
   white-space: pre-wrap;
   word-wrap: break-word;
-  font-size: 14px;
+  font-size: 20px;
   line-height: 1.5;
   text-align: center;
 }
 .navigate-button {
   position: absolute;
-  bottom: 20px; /* Adjust the position from the bottom */
-  left: 50%;
+  bottom: 10px; /* Adjust the position from the bottom */
+  left: 10%;
   transform: translateX(-50%); /* Center the button horizontally */
   background-color: #007bff;
-  color: white;
+  color: rgb(140, 11, 11);
   padding: 10px 20px;
   font-size: 18px;
   border: none;
@@ -65,25 +67,20 @@
 .items-list-container {
   margin-bottom: 20px;
 }
-
-.items-list {
-  list-style-type: none;
-  padding: 0;
-}
-
 .items-list li {
-  background-color: #ffffff;  /* White background for list items */
-  margin-bottom: 12px;
-  border-radius: 4px;
+  font-size: 23px;
+  font-weight: 500;
   text-align: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 8px 0;
+  transition: color 0.3s ease;
+  color:rgb(106, 33, 137);
 }
 
 .items-list li:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  color: #80ff00; /* Changes text color on hover */
+  transform: scale(1.05); /* Slight zoom effect */
 }
+
 
 /* Button styling */
 .button-container {
@@ -92,16 +89,16 @@
 
 .navigate-button {
   position: relative;
-  padding: 8px 16px;
+  padding: 20px 40px;
   font-size: 16px;
   cursor: pointer;
   border: none;
   background-color: #007bff;
-  color: #fff;
+  color: #175359;
   border-radius: 4px;
   transition: background-color 0.3s ease;
 }
 
 .navigate-button:hover {
-  background-color: #0056b3;
+  background-color: hsl(50, 72%, 42%);
 }

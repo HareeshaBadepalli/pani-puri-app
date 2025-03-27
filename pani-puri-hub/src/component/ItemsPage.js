@@ -13,13 +13,7 @@ const Items = () => {
       {/* Description text placed first */}
       <div className="description">
         <pre>
-My Pani Puri has come into existence out of Panipuri Lovers all over the world.
-We at My Pani Puri are committed to offering the highest standards and the most uniquely tasting Panipuri that can ever exist.
-Maintaining quality is our foremost priority.
-Our motive is to be the first in the market to produce fresh and the most hygienic Panipuri.
-Your love has already helped us to succeed in creating a successful Pani Puri brand.
-We take every step to make our customers happy.
-You do not have to find a reason to be happy, just gobble a plate or two of Panipuri with us and instantly cheer yourself up.
+        At My Pani Puri, we celebrate the love for Panipuri with a commitment to quality, hygiene, and unmatched taste. Our goal is to bring you the freshest and most delightful Panipuri experience. Thanks to your love and support
         </pre>
       </div>
 
@@ -33,7 +27,7 @@ You do not have to find a reason to be happy, just gobble a plate or two of Pani
           <li>🍭 Sweet Lassi</li>
           <li>😋 Dahi Puri</li>
           <li>😋 Samosa</li>
-          <li>😋 Vada Pav</li>
+          <li>Dahi paadi</li>
         </ul>
       </div>
 
