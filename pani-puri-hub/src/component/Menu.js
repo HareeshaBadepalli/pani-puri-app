@@ -13,6 +13,8 @@ const menuItems = [
 
 const Menu = () => {
   const [cart, setCart] = useState({});
+  const [cartVisible, setCartVisible] = useState(false);
+  const [message, setMessage] = useState("");
 
   // Function to handle increment
   const incrementQuantity = (item) => {
@@ -39,13 +41,49 @@ const Menu = () => {
     });
   };
 
+  // Function to add items to the cart
+  const addToCart = (item) => {
+    if (!cart[item.id] || cart[item.id].quantity === 0) {
+      setMessage(`Please select a quantity for ${item.name} before adding to cart.`);
+      setTimeout(() => setMessage(""), 2000);
+      return;
+    }
+
+    setMessage(`${item.name} added to cart.`);
+    setTimeout(() => setMessage(""), 2000);
+  };
+
   return (
     <div className="menu-container">
       {/* Header with "Our Menu" and "View Cart" */}
       <div className="menu-header">
         <h1 className="heading">Our Menu</h1>
-        <button className="view-cart">View Cart 🛒</button>
+        <button className="view-cart" onClick={() => setCartVisible(!cartVisible)}>
+          {cartVisible ? "Hide Cart" : "View Cart"} 🛒
+        </button>
       </div>
+
+      {/* Display message when an item is added */}
+      {message && <div className="cart-message">{message}</div>}
+
+      {/* Show cart items when "View Cart" is clicked */}
+      {cartVisible && (
+        <div className="cart-container">
+          <h2>Your Cart</h2>
+          {Object.values(cart).length > 0 ? (
+            <ul>
+              {Object.values(cart).map((item) => (
+                <li key={item.id}>
+                  {item.name} - {item.quantity} x {item.price} Rs ={" "}
+                  {item.quantity * item.price} Rs
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>Your cart is empty.</p>
+          )}
+        </div>
+      )}
 
       {/* Menu items */}
       <div className="menu-items">
@@ -59,7 +97,7 @@ const Menu = () => {
               <span className="quantity">{cart[item.id]?.quantity || 0}</span>
               <button className="increment" onClick={() => incrementQuantity(item)}>+</button>
             </div>
-            <button className="add-to-cart">Add to Cart</button>
+            <button className="add-to-cart" onClick={() => addToCart(item)}>Add to Cart</button>
           </div>
         ))}
       </div>

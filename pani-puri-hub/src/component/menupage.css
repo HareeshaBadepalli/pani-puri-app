@@ -87,7 +87,7 @@
   /* View Cart button */
 .view-cart {
   background-color: #007bff;
-  color: rgb(243, 44, 44);
+  color: hsl(143, 88%, 44%);
   border: none;
   padding: 8px 15px;
   border-radius: 5px;
@@ -158,7 +158,7 @@
 
 /* Styling for "Add to Cart" button */
 .add-to-cart {
-  background-color: #28a745; /* Green */
+  background-color: #2115c7; /* Green */
   color: white;
   padding: 10px 15px;
   border: none;
