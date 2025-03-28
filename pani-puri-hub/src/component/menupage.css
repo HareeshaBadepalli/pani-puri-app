@@ -2,7 +2,7 @@
 .menu-container {
     text-align: center;
     padding: 20px;
-    background-color:aquamarine;
+    background-color:rgb(85, 145, 129);
   }
   
   h1 {
@@ -22,16 +22,16 @@
   }
   
   
-  /* Grid for menu items */
-  .menu-items {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* First row will have 4 items */
-    gap: 20px;
-    justify-items: center;
-    padding: 20px;
-    color:aquamarine;
-    background: linear-gradient(to right, hsl(213, 48%, 64%), rgb(147, 250, 252)); /* Yellow to Orange */
-  }
+ /* Grid for menu items */
+ .menu-items {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* First row will have 4 items */
+  gap: 20px;
+  justify-items: center;
+  padding: 20px;
+  color:aquamarine;
+  background: linear-gradient(to right, hsl(213, 48%, 64%), rgb(147, 250, 252)); /* Yellow to Orange */
+}
   
   @media (max-width: 1200px) {
     .menu-items {
@@ -68,7 +68,7 @@
   
   p {
     font-size: 1rem;
-    color:aqua;
+    color:rgb(11, 209, 209);
     margin-bottom: 25px;
   }
   
@@ -109,7 +109,7 @@
 /* "View Cart" button aligned to the right */
 .view-cart {
   background-color: #ff6600; /* Orange */
-  color: white;
+  color: rgb(79, 220, 133);
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
@@ -134,7 +134,7 @@
 .decrement,
 .increment {
   background-color: #007bff; /* Blue */
-  color: white;
+  color: rgb(229, 48, 48);
   border: none;
   padding: 8px 12px;
   border-radius: 50%;

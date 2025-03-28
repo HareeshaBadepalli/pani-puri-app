@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./menupage.css";
 
 const menuItems = [
@@ -11,92 +12,67 @@ const menuItems = [
   { id: 7, name: "Masala Puri", price: 30, img: "images/masala-puri.png" },
 ];
 
-const Menu = () => {
-  const [cart, setCart] = useState({});
-  const [cartVisible, setCartVisible] = useState(false);
+const Menu = ({ cart, setCart }) => {
+  const [quantities, setQuantities] = useState({});
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
-  // Function to handle increment
-  const incrementQuantity = (item) => {
-    setCart((prevCart) => ({
-      ...prevCart,
-      [item.id]: prevCart[item.id]
-        ? { ...prevCart[item.id], quantity: prevCart[item.id].quantity + 1 }
-        : { ...item, quantity: 1 },
+  // Increase quantity
+  const increaseQuantity = (item) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [item.id]: (prev[item.id] || 0) + 1,
     }));
   };
 
-  // Function to handle decrement
-  const decrementQuantity = (item) => {
-    setCart((prevCart) => {
-      if (!prevCart[item.id] || prevCart[item.id].quantity === 1) {
-        const updatedCart = { ...prevCart };
-        delete updatedCart[item.id]; // Remove item from cart if quantity reaches 0
-        return updatedCart;
-      }
-      return {
-        ...prevCart,
-        [item.id]: { ...prevCart[item.id], quantity: prevCart[item.id].quantity - 1 },
-      };
-    });
+  // Decrease quantity (min 0)
+  const decreaseQuantity = (item) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [item.id]: Math.max((prev[item.id] || 0) - 1, 0),
+    }));
   };
 
-  // Function to add items to the cart
+  // Add to cart
   const addToCart = (item) => {
-    if (!cart[item.id] || cart[item.id].quantity === 0) {
-      setMessage(`Please select a quantity for ${item.name} before adding to cart.`);
-      setTimeout(() => setMessage(""), 2000);
-      return;
+    const quantityToAdd = quantities[item.id] || 0;
+    if (quantityToAdd > 0) {
+      setCart((prevCart) => ({
+        ...prevCart,
+        [item.id]: {
+          ...item,
+          quantity: (prevCart[item.id]?.quantity || 0) + quantityToAdd,
+        },
+      }));
+      setMessage(`${item.name} added to cart!`);
+      setTimeout(() => setMessage(""), 10000);
     }
-
-    setMessage(`${item.name} added to cart.`);
-    setTimeout(() => setMessage(""), 2000);
   };
 
   return (
     <div className="menu-container">
-      {/* Header with "Our Menu" and "View Cart" */}
       <div className="menu-header">
         <h1 className="heading">Our Menu</h1>
-        <button className="view-cart" onClick={() => setCartVisible(!cartVisible)}>
-          {cartVisible ? "Hide Cart" : "View Cart"} 🛒
+        <button className="view-cart" onClick={() => navigate("/cart")}>
+          View Cart 🛒
         </button>
       </div>
 
-      {/* Display message when an item is added */}
-      {message && <div className="cart-message">{message}</div>}
+      {message && <p className="message">{message}</p>}
 
-      {/* Show cart items when "View Cart" is clicked */}
-      {cartVisible && (
-        <div className="cart-container">
-          <h2>Your Cart</h2>
-          {Object.values(cart).length > 0 ? (
-            <ul>
-              {Object.values(cart).map((item) => (
-                <li key={item.id}>
-                  {item.name} - {item.quantity} x {item.price} Rs ={" "}
-                  {item.quantity * item.price} Rs
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>Your cart is empty.</p>
-          )}
-        </div>
-      )}
-
-      {/* Menu items */}
       <div className="menu-items">
         {menuItems.map((item) => (
           <div key={item.id} className="menu-card">
             <img src={`/${item.img}`} alt={item.name} />
             <h3>{item.name}</h3>
             <p>{item.price} Rs</p>
+
             <div className="cart-controls">
-              <button className="decrement" onClick={() => decrementQuantity(item)}>-</button>
-              <span className="quantity">{cart[item.id]?.quantity || 0}</span>
-              <button className="increment" onClick={() => incrementQuantity(item)}>+</button>
+              <button className="decrement" onClick={() => decreaseQuantity(item)}>-</button>
+              <span className="quantity">{quantities[item.id] || 0}</span>
+              <button className="increment" onClick={() => increaseQuantity(item)}>+</button>
             </div>
+
             <button className="add-to-cart" onClick={() => addToCart(item)}>Add to Cart</button>
           </div>
         ))}
