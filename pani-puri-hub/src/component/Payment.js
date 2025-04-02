@@ -1,15 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./payment.css"; // CSS for styling
+import "./payment.css";
 
 const Payment = () => {
+  const [address, setAddress] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [upiMethod, setUpiMethod] = useState("");
-  const [address, setAddress] = useState("");
-  const [message, setMessage] = useState(""); // State for success message
+  const [cartItems, setCartItems] = useState([]); 
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  const handlePayment = () => {
+  // Fetch cart items from localStorage
+  useEffect(() => {
+    const storedCart = localStorage.getItem("cart");
+    console.log("Stored Cart Data:", storedCart); // Debugging
+
+    if (storedCart) {
+      try {
+        const parsedCart = JSON.parse(storedCart);
+        console.log("Parsed Cart:", parsedCart); // Debugging
+        setCartItems(parsedCart);
+        const total = parsedCart.reduce((sum, item) => sum + item.quantity * item.price, 0);
+        setTotalPrice(total);
+      } catch (error) {
+        console.error("Error parsing cart data:", error);
+      }
+    }
+  }, []);
+
+  // Handle payment
+  const handlePayment = async () => {
     if (!address.trim()) {
       setMessage("⚠️ Please enter your delivery address!");
       return;
@@ -25,26 +46,52 @@ const Payment = () => {
       return;
     }
 
-    setMessage(`✅ Order placed successfully! Delivery to: ${address}`);
+    if (cartItems.length === 0) {
+      setMessage("⚠️ Your cart is empty! Add items before proceeding.");
+      return;
+    }
+
+    const orderData = {
+      address,
+      paymentMethod: paymentMethod === "Pay by UPI" ? upiMethod : paymentMethod,
+      totalPrice,
+      items: cartItems, 
+    };
+
+    try {
+      const response = await fetch("http://localhost:8090/api/orders/place", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (response.ok) {
+        setMessage(`✅ Order placed successfully! Delivery to: ${address}`);
+        localStorage.removeItem("cart");
+        navigate("/order-success");
+      } else {
+        setMessage("❌ Order failed! Please try again.");
+      }
+    } catch (error) {
+      console.error("Error placing order:", error);
+      setMessage("❌ Something went wrong! Please try again.");
+    }
   };
 
   return (
     <div className="payment-container">
       <h1>Payment & Delivery Details</h1>
 
-      {/* 🏠 Address Input */}
-      <div className="address-section">
-        <h3>Enter Delivery Address:</h3>
-        <textarea
-          placeholder="Enter your full address..."
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-        ></textarea>
-      </div>
+      <textarea 
+        placeholder="Enter Address" 
+        value={address} 
+        onChange={(e) => setAddress(e.target.value)} 
+      ></textarea>
 
-      {/* Cash on Delivery Option */}
       <div className="payment-options">
-        <h3>Cash on Delivery</h3>
+        <h3>Payment Method</h3>
         <label>
           <input
             type="radio"
@@ -53,16 +100,12 @@ const Payment = () => {
             onChange={(e) => {
               setPaymentMethod(e.target.value);
               setUpiMethod("");
-              setMessage(""); // Reset message
+              setMessage("");
             }}
           />
           Cash on Delivery
         </label>
-      </div>
 
-      {/* Pay by UPI Options */}
-      <div className="payment-options">
-        <h3>Pay by UPI</h3>
         <label>
           <input
             type="radio"
@@ -71,13 +114,12 @@ const Payment = () => {
             onChange={(e) => {
               setPaymentMethod(e.target.value);
               setUpiMethod("");
-              setMessage(""); // Reset message
+              setMessage("");
             }}
           />
           Pay by UPI
         </label>
 
-        {/* Show UPI options only when Pay by UPI is selected */}
         {paymentMethod === "Pay by UPI" && (
           <div className="upi-options">
             <label>
@@ -113,6 +155,17 @@ const Payment = () => {
         )}
       </div>
 
+      <h3>Order Summary</h3>
+      <ul>
+        {cartItems.map((item, index) => (
+          <li key={index}>
+            {item.itemName} - {item.quantity} x ₹{item.price}
+          </li>
+        ))}
+      </ul>
+
+      <h3>Total: ₹{totalPrice}</h3>
+
       <button className="pay-now-button" onClick={handlePayment}>
         Pay Now
       </button>
@@ -121,7 +174,6 @@ const Payment = () => {
         Back to Cart
       </button>
 
-      {/* ✅ Success/Error Message Displayed Here */}
       {message && <p className="payment-message">{message}</p>}
     </div>
   );

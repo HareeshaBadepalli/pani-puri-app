@@ -9,7 +9,7 @@ const Navbar = () => {
       <h1 style={styles.logo}>Sri Durga Chat Bandar</h1>
       <ul style={styles.navLinks}>
         <li>
-          <button onClick={() => navigate("/")} style={styles.navLinkButton}>
+          <button onClick={() => navigate("/home")} style={styles.navLinkButton}>
             Home
           </button>
         </li>

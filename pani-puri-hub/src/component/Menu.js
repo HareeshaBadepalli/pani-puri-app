@@ -15,6 +15,8 @@ const menuItems = [
 const Menu = ({ cart, setCart }) => {
   const [quantities, setQuantities] = useState({});
   const [message, setMessage] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState(""); // Sort Order
   const navigate = useNavigate();
 
   // Increase quantity
@@ -44,10 +46,36 @@ const Menu = ({ cart, setCart }) => {
           quantity: (prevCart[item.id]?.quantity || 0) + quantityToAdd,
         },
       }));
-      setMessage(`${item.name} added to cart!`);
+      
+      setMessage(`${item.name} added to cart!`)
       setTimeout(() => setMessage(""), 10000);
+    
     }
   };
+
+  // Function to highlight searched item
+  const highlightText = (text, highlight) => {
+    if (!highlight) return text;
+    const regex = new RegExp(`(${highlight})`, "gi");
+    return text.split(regex).map((part, index) =>
+      part.toLowerCase() === highlight.toLowerCase() ? (
+        <span key={index} style={{ backgroundColor: "yellow", fontWeight: "bold" }}>
+          {part}
+        </span>
+      ) : (
+        part
+      )
+    );
+  };
+
+  // Filtering and Sorting
+  const filteredItems = menuItems
+    .filter((item) => item.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    .sort((a, b) => {
+      if (sortOrder === "lowToHigh") return a.price - b.price;
+      if (sortOrder === "highToLow") return b.price - a.price;
+      return 0;
+    });
 
   return (
     <div className="menu-container">
@@ -58,24 +86,44 @@ const Menu = ({ cart, setCart }) => {
         </button>
       </div>
 
+      {/* Search and Sort Options */}
+      <div className="menu-controls">
+        <input
+          type="text"
+          placeholder="Search items..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
+        <select onChange={(e) => setSortOrder(e.target.value)}>
+          <option value="">Sort By</option>
+          <option value="lowToHigh">Price: Low to High</option>
+          <option value="highToLow">Price: High to Low</option>
+        </select>
+      </div>
+
       {message && <p className="message">{message}</p>}
 
       <div className="menu-items">
-        {menuItems.map((item) => (
-          <div key={item.id} className="menu-card">
-            <img src={`/${item.img}`} alt={item.name} />
-            <h3>{item.name}</h3>
-            <p>{item.price} Rs</p>
+        {filteredItems.length > 0 ? (
+          filteredItems.map((item) => (
+            <div key={item.id} className="menu-card">
+              <img src={`/${item.img}`} alt={item.name} />
+              <h3>{highlightText(item.name, searchTerm)}</h3>
+              <p>{item.price} Rs</p>
 
-            <div className="cart-controls">
-              <button className="decrement" onClick={() => decreaseQuantity(item)}>-</button>
-              <span className="quantity">{quantities[item.id] || 0}</span>
-              <button className="increment" onClick={() => increaseQuantity(item)}>+</button>
+              <div className="cart-controls">
+                <button className="decrement" onClick={() => decreaseQuantity(item)}>-</button>
+                <span className="quantity">{quantities[item.id] || 0}</span>
+                <button className="increment" onClick={() => increaseQuantity(item)}>+</button>
+              </div>
+
+              <button className="add-to-cart" onClick={() => addToCart(item)}>Add to Cart</button>
             </div>
-
-            <button className="add-to-cart" onClick={() => addToCart(item)}>Add to Cart</button>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p className="no-results">No items found</p>
+        )}
       </div>
     </div>
   );

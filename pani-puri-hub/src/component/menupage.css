@@ -41,11 +41,11 @@
   
   /* Style for individual menu cards */
   .menu-card {
-    border: 1px solid #cfcd28;
+    border: 3px solid #0d0f0f;
     padding: 15px;
     border-radius: 8px;
     text-align: center;
-    background: linear-gradient(to right, hsl(326, 93%, 51%), hsl(92, 96%, 38%)); /* Yellow to Orange */
+    background-color:rgb(145, 145, 82);
     box-shadow: 0 4px 8px rgba(122, 194, 80, 0.1);
     width: 100%;
     max-width: 250px;
@@ -67,7 +67,7 @@
   }
   
   p {
-    font-size: 1rem;
+    font-size: 25px;
     color:rgb(11, 209, 209);
     margin-bottom: 25px;
   }
@@ -75,10 +75,12 @@
   button {
     background-color:blueviolet;
     color: white;
-    padding: 10px 20px;
+    padding: 15px 25px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    margin-top: 10px;
+    font-size: 20px;
   }
   
   button:hover {
@@ -171,4 +173,51 @@
 
 .add-to-cart:hover {
   background-color: #218838; /* Darker green */
+}
+.menu-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.menu-controls input {
+  padding: 8px;
+  border: 2px solid #ff9800;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+}
+
+.menu-controls button {
+  background-color: #ff5722;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s ease;
+}
+
+.menu-controls button:hover {
+  background-color: #e64a19;
+}
+
+.menu-controls select {
+  padding: 8px;
+  border: 2px solid #ff9800;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.menu-controls select:focus {
+  outline: none;
+  border-color: #ff5722;
+}
+.message{
+  font-size: 30px;
+  background-color: #218838;
 }

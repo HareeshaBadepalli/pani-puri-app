@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./cart.css"; // Import the CSS file
+
 const Cart = ({ cart, setCart }) => {
   const navigate = useNavigate();
 
@@ -55,9 +56,15 @@ const Cart = ({ cart, setCart }) => {
         <p>Your cart is empty.</p>
       )}
       <h2 className="total-cost">Total Cost: {totalCost} Rs</h2>
-       
+      
       {/* Click to Pay Button */}
-      <button className="pay-button" onClick={() => navigate("/payment")}>
+      <button
+        className="pay-button"
+        onClick={() => {
+          localStorage.setItem("cart", JSON.stringify(Object.values(cart))); // Save cart data before navigating
+          navigate("/payment");
+        }}
+      >
         Click to Pay
       </button>
       <button className="back-button" onClick={() => navigate("/menu")}>Back to Menu</button>

@@ -1,0 +1,63 @@
+/* Full-page background with a warm food-like gradient */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(to right, #ffcc80, #81c784); /* Orange to Green */
+}
+
+/* Login box inspired by a Pani Puri cart */
+.login-box {
+  background: #d4a373; /* Golden brown like puris */
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  width: 350px;
+}
+
+/* Title styling */
+.login-box h2 {
+  margin-bottom: 20px;
+  color: #5d4037; /* Brown for a street-style theme */
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Input fields with fresh colors */
+.login-box input {
+  width: 85%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 3px solid #ff9800; /* Orange like spices */
+  border-radius: 25px;
+  font-size: 16px;
+  background-color: #fff3e0; /* Light beige */
+}
+
+/* Focus effect */
+.login-box input:focus {
+  outline: none;
+  border-color: #4caf50; /* Green like mint chutney */
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+}
+
+/* Login button */
+.login-box button {
+  width: 100%;
+  padding: 12px;
+  font-size: 18px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: 0.3s;
+  background-color: #ff9800; /* Orange for spice */
+  color: white;
+  font-weight: bold;
+}
+
+/* Hover effect */
+.login-box button:hover {
+  background-color: #e65100; /* Darker orange */
+}

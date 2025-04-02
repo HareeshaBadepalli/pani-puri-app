@@ -59,14 +59,13 @@
   border-radius: 50%;
   position: absolute;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  animation: floatEffect 3s infinite ease-in-out;
 }
 
 /* Adjusting Image Placement */
-.top-left  { top: 5%; left: 31%; transform: rotate(-30deg); }
-.top-right { top: 5%; right: 31%; transform: rotate(30deg); }
-.bottom-left  { bottom: 5%; left: 31%; transform: rotate(15deg); }
-.bottom-right { bottom: 5%; right: 31%; transform: rotate(-15deg); }
+.top-left  { top: 20%; left: 35%; transform: rotate(-30deg); }
+.top-right { top: 20%; right: 35%; transform: rotate(30deg); }
+.bottom-left  { bottom: 20%; left: 35%; transform: rotate(15deg); }
+.bottom-right { bottom: 20%; right: 35%; transform: rotate(-15deg); }
 
 /* Hover effects */
 .side:hover {
@@ -114,7 +113,7 @@
   }
 
   .side {
-    width: 90px;
-    height: 90px;
+    width: 70px;
+    height: 70px;
   }
 }
