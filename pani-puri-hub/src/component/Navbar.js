@@ -18,6 +18,12 @@ const Navbar = () => {
             Menu
           </button>
         </li>
+        <li>
+          <button onClick={() => navigate("/login")} style={styles.navLinkButton}>
+            Signout
+          </button>
+        </li>
+
       </ul>
     </nav>
   );

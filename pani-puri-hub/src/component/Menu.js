@@ -1,25 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./menupage.css";
 
 const menuItems = [
-  { id: 1, name: "Dahi Papdi", price: 40, img: "images/dahi_papdi.png" },
-  { id: 2, name: "Dahi Puri", price: 40, img: "images/Dahi-puri.png" },
-  { id: 3, name: "Pani Puri", price: 15, img: "images/pani-puri.png" },
-  { id: 4, name: "Samosa Chaat", price: 30, img: "images/samosa-chaat.png" },
-  { id: 5, name: "Sev Puri", price: 25, img: "images/sev-puri.png" },
-  { id: 6, name: "Bhel Puri", price: 35, img: "images/bhel-puri.png" },
-  { id: 7, name: "Masala Puri", price: 30, img: "images/masala-puri.png" },
+  { id: 1, name: "Dahi Papdi", price: 40, img: "images/dahi_papdi.png",stock:50 },
+  { id: 2, name: "Dahi Puri", price: 40, img: "images/Dahi-puri.png",stock:50},
+  { id: 3, name: "Pani Puri", price: 15, img: "images/pani-puri.png",stock:100},
+  { id: 4, name: "Samosa Chaat", price: 30, img: "images/samosa-chaat.png", stock:30},
+  { id: 5, name: "Sev Puri", price: 25, img: "images/sev-puri.png",stock:40 },
+  { id: 6, name: "Bhel Puri", price: 35, img: "images/bhel-puri.png",stock:35 },
+  { id: 7, name: "Masala Puri", price: 30, img: "images/masala-puri.png",stock:25 },
 ];
 
 const Menu = ({ cart, setCart }) => {
   const [quantities, setQuantities] = useState({});
   const [message, setMessage] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortOrder, setSortOrder] = useState(""); // Sort Order
+  const [sortOrder, setSortOrder] = useState("");
+  const [lastName, setLastName] = useState("Guest");
+
   const navigate = useNavigate();
 
-  // Increase quantity
+  useEffect(() => {
+    const storedLastName = localStorage.getItem("lastName");
+    if (storedLastName) {
+      setLastName(storedLastName);
+    }
+  }, []); 
+
   const increaseQuantity = (item) => {
     setQuantities((prev) => ({
       ...prev,
@@ -27,7 +35,6 @@ const Menu = ({ cart, setCart }) => {
     }));
   };
 
-  // Decrease quantity (min 0)
   const decreaseQuantity = (item) => {
     setQuantities((prev) => ({
       ...prev,
@@ -35,7 +42,6 @@ const Menu = ({ cart, setCart }) => {
     }));
   };
 
-  // Add to cart
   const addToCart = (item) => {
     const quantityToAdd = quantities[item.id] || 0;
     if (quantityToAdd > 0) {
@@ -46,14 +52,12 @@ const Menu = ({ cart, setCart }) => {
           quantity: (prevCart[item.id]?.quantity || 0) + quantityToAdd,
         },
       }));
-      
-      setMessage(`${item.name} added to cart!`)
-      setTimeout(() => setMessage(""), 10000);
-    
+
+      setMessage(`${item.name} added to cart!`);
+      setTimeout(() => setMessage(""), 3000);
     }
   };
 
-  // Function to highlight searched item
   const highlightText = (text, highlight) => {
     if (!highlight) return text;
     const regex = new RegExp(`(${highlight})`, "gi");
@@ -68,7 +72,6 @@ const Menu = ({ cart, setCart }) => {
     );
   };
 
-  // Filtering and Sorting
   const filteredItems = menuItems
     .filter((item) => item.name.toLowerCase().includes(searchTerm.toLowerCase()))
     .sort((a, b) => {
@@ -81,12 +84,10 @@ const Menu = ({ cart, setCart }) => {
     <div className="menu-container">
       <div className="menu-header">
         <h1 className="heading">Our Menu</h1>
-        <button className="view-cart" onClick={() => navigate("/cart")}>
-          View Cart 🛒
-        </button>
+        <span className="user-info">Welcome, {lastName}</span>
+        <button className="view-cart" onClick={() => navigate("/cart")}>View Cart 🛒</button>
       </div>
 
-      {/* Search and Sort Options */}
       <div className="menu-controls">
         <input
           type="text"

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./payment.css";
+import sendMenuDataToBackend from "./sendMenuDataToBackend";
+
 
 const Payment = () => {
   const [address, setAddress] = useState("");
@@ -10,6 +12,8 @@ const Payment = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+
+  const  storedlastName=localStorage.getItem("lastName")
 
   // Fetch cart items from localStorage
   useEffect(() => {
@@ -51,15 +55,21 @@ const Payment = () => {
       return;
     }
 
-    const orderData = {
-      address,
-      paymentMethod: paymentMethod === "Pay by UPI" ? upiMethod : paymentMethod,
-      totalPrice,
-      items: cartItems, 
-    };
+const orderData = {
+  customerName: storedlastName,
+  address,
+  paymentMethod: paymentMethod === "Pay by UPI" ? upiMethod : paymentMethod,
+  totalPrice,
+  items: cartItems.map(item => ({
+    itemName: item.name,     // ✅ match ItemRequest.java field
+    quantity: item.quantity,
+    price: item.price
+  }))
+};
+
 
     try {
-      const response = await fetch("http://localhost:8090/api/orders/place", {
+      const response = await fetch("http://localhost:8092/api/orders/place", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -173,6 +183,10 @@ const Payment = () => {
       <button className="back-button" onClick={() => navigate("/cart")}>
         Back to Cart
       </button>
+      
+  <button onClick={sendMenuDataToBackend} style={{ marginBottom: "10px" }}>
+    Send Menu to Backend
+  </button>
 
       {message && <p className="payment-message">{message}</p>}
     </div>

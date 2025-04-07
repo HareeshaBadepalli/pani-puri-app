@@ -221,3 +221,30 @@
   font-size: 30px;
   background-color: #218838;
 }
+.user-info {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: #66a7e7;
+  background-color: #165565;
+  padding: 8px 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 5px rgba(157, 112, 112, 0.1);
+  display: inline-block;
+  margin-right: 15px;
+  transition: all 0.3s ease;
+  animation: pulse 2s infinite;
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+}
+
+.user-info:hover {
+  background-color: #dcdde1;
+  color: #179a8d;
+}
