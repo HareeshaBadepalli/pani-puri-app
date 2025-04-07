@@ -9,7 +9,6 @@ import Payment from "./component/Payment";
 import Login from "./component/Login";
 import Signing from "./component/Signing";
 import AuthPage from "./component/AuthPage";  // Import AuthPage
-import Review from "./component/Review";
 
 
 
@@ -39,7 +38,6 @@ function App() {
             <Route path="/menu" element={<><Navbar /><Menu cart={cart} setCart={setCart} /><Footer /></>} />
             <Route path="/cart" element={<><Navbar /><Cart cart={cart} setCart={setCart} /><Footer /></>} />
             <Route path="/payment" element={<><Navbar /><Payment /><Footer /></>} />
-            <Route path="/review" element={<Review />} />
 
           </>
         ) : (

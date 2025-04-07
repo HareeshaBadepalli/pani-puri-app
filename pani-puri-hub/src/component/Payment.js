@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./payment.css";
-import sendMenuDataToBackend from "./sendMenuDataToBackend";
 
 
 const Payment = () => {
@@ -183,10 +182,7 @@ const orderData = {
       <button className="back-button" onClick={() => navigate("/cart")}>
         Back to Cart
       </button>
-      
-  <button onClick={sendMenuDataToBackend} style={{ marginBottom: "10px" }}>
-    Send Menu to Backend
-  </button>
+ 
 
       {message && <p className="payment-message">{message}</p>}
     </div>
