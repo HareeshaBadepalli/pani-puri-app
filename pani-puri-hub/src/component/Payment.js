@@ -68,7 +68,7 @@ const orderData = {
 
 
     try {
-      const response = await fetch("http://localhost:8092/api/orders/place", {
+      const response = await fetch("http://localhost:8093/api/orders/place", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

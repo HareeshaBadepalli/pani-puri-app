@@ -17,7 +17,7 @@ const Login = ({ setIsAuthenticated }) => {
     setLoading(true); // Start loading
 
     try {
-      const response = await axios.post("http://localhost:8092/api/users/login", loginData);
+      const response = await axios.post("http://localhost:8093/api/users/login", loginData);
 
       if (response.data && response.data.message === "Login successful!") {
         alert("Login successful!");
@@ -26,6 +26,8 @@ const Login = ({ setIsAuthenticated }) => {
         localStorage.setItem("isAuthenticated", "true");
         localStorage.setItem("userEmail", response.data.email);
         localStorage.setItem("lastName", response.data.lastName);
+        localStorage.setItem("email", loginData.email);
+        localStorage.setItem("password", loginData.password);
 
         setIsAuthenticated(true);
         navigate("/home");

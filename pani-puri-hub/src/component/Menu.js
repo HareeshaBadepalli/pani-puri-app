@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import "./menupage.css";
 
 const menuItems = [
-  { id: 1, name: "Dahi Papdi", price: 40, img: "images/dahi_papdi.png",stock:50 },
-  { id: 2, name: "Dahi Puri", price: 40, img: "images/Dahi-puri.png",stock:50},
-  { id: 3, name: "Pani Puri", price: 15, img: "images/pani-puri.png",stock:100},
-  { id: 4, name: "Samosa Chaat", price: 30, img: "images/samosa-chaat.png", stock:30},
-  { id: 5, name: "Sev Puri", price: 25, img: "images/sev-puri.png",stock:40 },
-  { id: 6, name: "Bhel Puri", price: 35, img: "images/bhel-puri.png",stock:35 },
-  { id: 7, name: "Masala Puri", price: 30, img: "images/masala-puri.png",stock:25 },
+  { id: 1, name: "Dahi Papdi", price: 40, img: "images/dahi_papdi.png", stock: 50 },
+  { id: 2, name: "Dahi Puri", price: 40, img: "images/Dahi-puri.png", stock: 50 },
+  { id: 3, name: "Pani Puri", price: 15, img: "images/pani-puri.png", stock: 100 },
+  { id: 4, name: "Samosa Chaat", price: 30, img: "images/samosa-chaat.png", stock: 30 },
+  { id: 5, name: "Sev Puri", price: 25, img: "images/sev-puri.png", stock: 40 },
+  { id: 6, name: "Bhel Puri", price: 35, img: "images/bhel-puri.png", stock: 35 },
+  { id: 7, name: "Masala Puri", price: 30, img: "images/masala-puri.png", stock: 25 },
 ];
 
 const Menu = ({ cart, setCart }) => {
@@ -17,6 +17,7 @@ const Menu = ({ cart, setCart }) => {
   const [message, setMessage] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("");
+  const [selectedItemName, setSelectedItemName] = useState("");
   const [lastName, setLastName] = useState("Guest");
 
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const Menu = ({ cart, setCart }) => {
     if (storedLastName) {
       setLastName(storedLastName);
     }
-  }, []); 
+  }, []);
 
   const increaseQuantity = (item) => {
     setQuantities((prev) => ({
@@ -73,7 +74,11 @@ const Menu = ({ cart, setCart }) => {
   };
 
   const filteredItems = menuItems
-    .filter((item) => item.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    .filter((item) => {
+      const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesItem = selectedItemName ? item.name === selectedItemName : true;
+      return matchesSearch && matchesItem;
+    })
     .sort((a, b) => {
       if (sortOrder === "lowToHigh") return a.price - b.price;
       if (sortOrder === "highToLow") return b.price - a.price;
@@ -85,7 +90,9 @@ const Menu = ({ cart, setCart }) => {
       <div className="menu-header">
         <h1 className="heading">Our Menu</h1>
         <span className="user-info">Welcome, {lastName}</span>
-        <button className="view-cart" onClick={() => navigate("/cart")}>View Cart 🛒</button>
+        <button className="view-cart" onClick={() => navigate("/cart")}>
+          View Cart 🛒
+        </button>
       </div>
 
       <div className="menu-controls">
@@ -96,10 +103,19 @@ const Menu = ({ cart, setCart }) => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
 
-        <select onChange={(e) => setSortOrder(e.target.value)}>
+        <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
           <option value="">Sort By</option>
           <option value="lowToHigh">Price: Low to High</option>
           <option value="highToLow">Price: High to Low</option>
+        </select>
+
+        <select value={selectedItemName} onChange={(e) => setSelectedItemName(e.target.value)}>
+          <option value="">Filter by Item</option>
+          {menuItems.map((item) => (
+            <option key={item.id} value={item.name}>
+              {item.name}
+            </option>
+          ))}
         </select>
       </div>
 
@@ -114,12 +130,18 @@ const Menu = ({ cart, setCart }) => {
               <p>{item.price} Rs</p>
 
               <div className="cart-controls">
-                <button className="decrement" onClick={() => decreaseQuantity(item)}>-</button>
+                <button className="decrement" onClick={() => decreaseQuantity(item)}>
+                  -
+                </button>
                 <span className="quantity">{quantities[item.id] || 0}</span>
-                <button className="increment" onClick={() => increaseQuantity(item)}>+</button>
+                <button className="increment" onClick={() => increaseQuantity(item)}>
+                  +
+                </button>
               </div>
 
-              <button className="add-to-cart" onClick={() => addToCart(item)}>Add to Cart</button>
+              <button className="add-to-cart" onClick={() => addToCart(item)}>
+                Add to Cart
+              </button>
             </div>
           ))
         ) : (
@@ -131,3 +153,4 @@ const Menu = ({ cart, setCart }) => {
 };
 
 export default Menu;
+\

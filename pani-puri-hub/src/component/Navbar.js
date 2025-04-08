@@ -4,10 +4,27 @@ import { useNavigate } from "react-router-dom";
 const Navbar = () => {
   const navigate = useNavigate();
 
+  // Get email and password from localStorage
+  const loggedInEmail = localStorage.getItem("email");
+  const loggedInPassword = localStorage.getItem("password");
+
   return (
     <nav style={styles.navbar}>
       <h1 style={styles.logo}>Sri Durga Chat Bandar</h1>
       <ul style={styles.navLinks}>
+        {/* Conditionally render Addmenuitem button only for specific user */}
+        {loggedInEmail === "badepallihareesha123@gmail.com" &&
+          loggedInPassword === "Hareesha@123" && (
+            <li>
+              <button
+                onClick={() => navigate("/add-item")}
+                style={styles.navLinkButton}
+              >
+                Addmenuitem
+              </button>
+            </li>
+          )}
+
         <li>
           <button onClick={() => navigate("/home")} style={styles.navLinkButton}>
             Home
@@ -23,7 +40,6 @@ const Navbar = () => {
             Signout
           </button>
         </li>
-
       </ul>
     </nav>
   );
