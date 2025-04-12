@@ -8,7 +8,8 @@ const AddNewItem = ({ editItem, onClose, onUpdated }) => {
   const [formData, setFormData] = useState({
     name: "",
     price: "",
-    stock: ""
+    stock: "",
+    image: null,
   });
 
   useEffect(() => {
@@ -16,36 +17,40 @@ const AddNewItem = ({ editItem, onClose, onUpdated }) => {
       setFormData({
         name: editItem.name || "",
         price: editItem.price || "",
-        stock: editItem.stock || ""
+        image: null, // Image update optional
       });
     }
   }, [editItem, isUpdateMode]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, files } = e.target;
+
+    if (name === "image") {
+      setFormData({ ...formData, image: files[0] });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = async () => {
     try {
+      const data = new FormData();
+      data.append("name", formData.name);
+      data.append("price", formData.price);
+      if (formData.image) data.append("image", formData.image);
+
       if (isUpdateMode) {
-        await axios.put(`http://localhost:8093/api/menu/update/${editItem.id}`, null, {
-          params: {
-            name: formData.name,
-            price: formData.price,
-            stock: formData.stock
-          }
-        });
+        await axios.put(
+          `http://localhost:8094/api/menu/update/${editItem.id}`,
+          data,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
         alert("Item updated successfully");
         if (onUpdated) onUpdated();
         if (onClose) onClose();
       } else {
-        await axios.post("http://localhost:8093/api/menu/add", null, {
-          params: {
-            name: formData.name,
-            price: formData.price,
-            stock: formData.stock
-          }
+        await axios.post("http://localhost:8094/api/menu/add", data, {
+          headers: { "Content-Type": "multipart/form-data" },
         });
         alert("Item added successfully");
         window.location.href = "/add-item";
@@ -59,9 +64,27 @@ const AddNewItem = ({ editItem, onClose, onUpdated }) => {
   return (
     <div className={isUpdateMode ? "modal" : "add-new-form"}>
       <h2>{isUpdateMode ? "Update Item" : "Add New Menu Item"}</h2>
-      <input type="text" name="name" placeholder="Item Name" value={formData.name} onChange={handleChange} />
-      <input type="number" name="price" placeholder="Price" value={formData.price} onChange={handleChange} />
-      <input type="number" name="stock" placeholder="Stock" value={formData.stock} onChange={handleChange} />
+      <input
+        type="text"
+        name="name"
+        placeholder="Item Name"
+        value={formData.name}
+        onChange={handleChange}
+      />
+      <input
+        type="number"
+        name="price"
+        placeholder="Price"
+        value={formData.price}
+        onChange={handleChange}
+      />
+      <input
+        type="file"
+        name="image"
+        accept="image/*"
+        onChange={handleChange}
+      />
+
       <button onClick={handleSubmit}>{isUpdateMode ? "Save" : "Submit"}</button>
       {isUpdateMode && <button onClick={onClose}>Cancel</button>}
     </div>

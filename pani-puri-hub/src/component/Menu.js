@@ -2,16 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./menupage.css";
 
-const menuItems = [
-  { id: 1, name: "Dahi Papdi", price: 40, img: "images/dahi_papdi.png", stock: 50 },
-  { id: 2, name: "Dahi Puri", price: 40, img: "images/Dahi-puri.png", stock: 50 },
-  { id: 3, name: "Pani Puri", price: 15, img: "images/pani-puri.png", stock: 100 },
-  { id: 4, name: "Samosa Chaat", price: 30, img: "images/samosa-chaat.png", stock: 30 },
-  { id: 5, name: "Sev Puri", price: 25, img: "images/sev-puri.png", stock: 40 },
-  { id: 6, name: "Bhel Puri", price: 35, img: "images/bhel-puri.png", stock: 35 },
-  { id: 7, name: "Masala Puri", price: 30, img: "images/masala-puri.png", stock: 25 },
-];
-
 const Menu = ({ cart, setCart }) => {
   const [quantities, setQuantities] = useState({});
   const [message, setMessage] = useState("");
@@ -19,38 +9,77 @@ const Menu = ({ cart, setCart }) => {
   const [sortOrder, setSortOrder] = useState("");
   const [selectedItemName, setSelectedItemName] = useState("");
   const [lastName, setLastName] = useState("Guest");
+  const [menuItems, setMenuItems] = useState([]);
+  const [disabledButtons, setDisabledButtons] = useState({});
+  const [clickedButton, setClickedButton] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const storedLastName = localStorage.getItem("lastName");
-    if (storedLastName) {
-      setLastName(storedLastName);
-    }
+    const storedEmail = localStorage.getItem("email");
+    if (storedLastName) setLastName(storedLastName);
+    if (storedEmail === "badepallihareesha123@gmail.com") setIsAdmin(true);
+
+    fetch("http://localhost:8094/api/menu")
+      .then((res) => res.json())
+      .then((data) => {
+        setMenuItems(data);
+        const disabledMap = {};
+        data.forEach((item) => {
+          if (!item.available) disabledMap[item.id] = true;
+        });
+        setDisabledButtons(disabledMap);
+      })
+      .catch((err) => console.error("Failed to fetch menu items", err));
   }, []);
 
-  const increaseQuantity = (item) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [item.id]: (prev[item.id] || 0) + 1,
-    }));
+  const updateAvailabilityInBackend = async (itemId, availableStatus) => {
+    try {
+      await fetch(`http://localhost:8094/api/menu/${itemId}/disable`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ available: availableStatus }),
+      });
+    } catch (error) {
+      console.error("Error updating availability:", error);
+    }
   };
 
-  const decreaseQuantity = (item) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [item.id]: Math.max((prev[item.id] || 0) - 1, 0),
-    }));
+  const handleClick = (itemId, action) => {
+    if (disabledButtons[itemId]) return;
+
+    setQuantities((prev) => {
+      const currentQty = prev[itemId] || 0;
+      const newQty = action === "increment" ? currentQty + 1 : Math.max(currentQty - 1, 0);
+
+      if (isAdmin && action === "increment") {
+        setDisabledButtons((prev) => ({ ...prev, [itemId]: true }));
+        updateAvailabilityInBackend(itemId, false);
+        return { ...prev, [itemId]: 0 };
+      }
+
+      return { ...prev, [itemId]: newQty };
+    });
+
+    setClickedButton({ id: itemId, action });
+    setTimeout(() => setClickedButton(null), 300);
   };
 
   const addToCart = (item) => {
+    if (disabledButtons[item.id]) return;
+
     const quantityToAdd = quantities[item.id] || 0;
     if (quantityToAdd > 0) {
       setCart((prevCart) => ({
         ...prevCart,
         [item.id]: {
-          ...item,
+          id: item.id,
+          name: item.name,
+          price: item.price,
           quantity: (prevCart[item.id]?.quantity || 0) + quantityToAdd,
+          imagePath: item.imagePath,
         },
       }));
 
@@ -123,27 +152,87 @@ const Menu = ({ cart, setCart }) => {
 
       <div className="menu-items">
         {filteredItems.length > 0 ? (
-          filteredItems.map((item) => (
-            <div key={item.id} className="menu-card">
-              <img src={`/${item.img}`} alt={item.name} />
-              <h3>{highlightText(item.name, searchTerm)}</h3>
-              <p>{item.price} Rs</p>
+          filteredItems.map((item) => {
+            const isDisabled = disabledButtons[item.id];
+            return (
+              <div key={item.id} className={`menu-card ${isDisabled ? "card-disabled" : ""}`}>
+                <div className="image-wrapper">
+                  <img
+                    src={`http://localhost:8094/images/${item.imagePath}`}
+                    alt={item.name}
+                    className={isDisabled ? "disabled-image" : ""}
+                    onClick={() => {
+                      if (isAdmin && !isDisabled) {
+                        setDisabledButtons((prev) => ({ ...prev, [item.id]: true }));
+                        setQuantities((prev) => ({ ...prev, [item.id]: 0 }));
+                        updateAvailabilityInBackend(item.id, false);
+                      }
+                    }}
+                  />
+                  {isDisabled && <div className="overlay">No Items Available</div>}
+                </div>
 
-              <div className="cart-controls">
-                <button className="decrement" onClick={() => decreaseQuantity(item)}>
-                  -
+                <h3>{highlightText(item.name, searchTerm)}</h3>
+                <p>{item.price} Rs</p>
+
+                <div className="cart-controls">
+                  <button
+                    className={`decrement ${
+                      clickedButton?.id === item.id && clickedButton?.action === "decrement"
+                        ? "clicked"
+                        : ""
+                    }`}
+                    onClick={() => handleClick(item.id, "decrement")}
+                    disabled={isDisabled}
+                  >
+                    -
+                  </button>
+
+                  <span className="quantity" style={{ color: isDisabled ? "red" : "black" }}>
+                    {isDisabled ? 0 : quantities[item.id] || 0}
+                  </span>
+
+                  <button
+                    className={`increment ${
+                      clickedButton?.id === item.id && clickedButton?.action === "increment"
+                        ? "clicked"
+                        : ""
+                    }`}
+                    onClick={() => handleClick(item.id, "increment")}
+                    disabled={isDisabled}
+                  >
+                    +
+                  </button>
+                </div>
+
+                {isDisabled && <p className="stock-message">Stock is not available</p>}
+
+                <button
+                  className="add-to-cart"
+                  onClick={() => addToCart(item)}
+                  disabled={isDisabled}
+                >
+                  Add to Cart
                 </button>
-                <span className="quantity">{quantities[item.id] || 0}</span>
-                <button className="increment" onClick={() => increaseQuantity(item)}>
-                  +
-                </button>
+                   {isAdmin &&  (
+                  <button
+                    className="re-enable-button"
+                    onClick={() => {
+                      setDisabledButtons((prev) => {
+                        const updated = { ...prev };
+                        delete updated[item.id];
+                        return updated;
+                      });
+                      setQuantities((prev) => ({ ...prev, [item.id]: 0 }));
+                      updateAvailabilityInBackend(item.id, true);
+                    }}
+                  >
+                    Re-enable
+                  </button>
+                )}
               </div>
-
-              <button className="add-to-cart" onClick={() => addToCart(item)}>
-                Add to Cart
-              </button>
-            </div>
-          ))
+            );
+          })
         ) : (
           <p className="no-results">No items found</p>
         )}
@@ -153,4 +242,3 @@ const Menu = ({ cart, setCart }) => {
 };
 
 export default Menu;
-\

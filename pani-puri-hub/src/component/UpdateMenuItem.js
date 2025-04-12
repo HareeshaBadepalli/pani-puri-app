@@ -9,12 +9,18 @@ const UpdateMenuItem = () => {
     id: "",
     name: "",
     price: "",
-    stock: ""
+    imagePath: ""
   });
+
+  const [imageFile, setImageFile] = useState(null);
+  const [preview, setPreview] = useState("");
 
   useEffect(() => {
     if (location.state && location.state.item) {
       setItem(location.state.item);
+      if (location.state.item.imagePath) {
+        setPreview(`http://localhost:8094/images/${location.state.item.imagePath}`);
+      }
     } else {
       alert("No item data found.");
       navigate("/add-menu-item");
@@ -29,15 +35,32 @@ const UpdateMenuItem = () => {
     }));
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
+
   const handleUpdate = async () => {
+    const formData = new FormData();
+    formData.append("name", item.name);
+    formData.append("price", item.price);
+    if (imageFile) {
+      formData.append("imageFile", imageFile);
+    }
+
     try {
-      await axios.put(`http://localhost:8093/api/menu/update/${item.id}`, null, {
-        params: {
-          name: item.name,
-          price: item.price,
-          stock: item.stock
+      await axios.put(
+        `http://localhost:8094/api/menu/update/${item.id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
         }
-      });
+      );
       alert("Item updated successfully");
       navigate("/add-item");
     } catch (error) {
@@ -71,15 +94,19 @@ const UpdateMenuItem = () => {
               />
             </label>
             <label>
-              Stock:
-              <input
-                type="number"
-                name="stock"
-                value={item.stock}
-                onChange={handleChange}
-              />
+              Image:
+              <input type="file" accept="image/*" onChange={handleImageChange} />
             </label>
-            <button className="save-btn" onClick={handleUpdate}>Save</button>
+            {preview && (
+              <img
+                src={preview}
+                alt="Preview"
+                style={{ width: "100px", marginTop: "10px" }}
+              />
+            )}
+            <button className="save-btn" onClick={handleUpdate}>
+              Save
+            </button>
           </div>
         </div>
       </div>

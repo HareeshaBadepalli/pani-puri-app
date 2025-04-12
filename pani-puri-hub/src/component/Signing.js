@@ -21,7 +21,7 @@ const Signing = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8093/api/users/signing", user);
+      await axios.post("http://localhost:8094/api/users/signing", user);
       alert("Signup successful! Please log in.");
       navigate("/login");
     } catch (error) {

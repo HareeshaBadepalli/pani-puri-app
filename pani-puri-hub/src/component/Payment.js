@@ -1,28 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./payment.css";
-
+import OrderFeedback from "./OrderFeedback"; // ✅ NEW: import feedback component
 
 const Payment = () => {
   const [address, setAddress] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [upiMethod, setUpiMethod] = useState("");
-  const [cartItems, setCartItems] = useState([]); 
+  const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [message, setMessage] = useState("");
+  const [orderPlaced, setOrderPlaced] = useState(false); // ✅ NEW
   const navigate = useNavigate();
 
-  const  storedlastName=localStorage.getItem("lastName")
+  const storedlastName = localStorage.getItem("lastName");
 
-  // Fetch cart items from localStorage
   useEffect(() => {
     const storedCart = localStorage.getItem("cart");
-    console.log("Stored Cart Data:", storedCart); // Debugging
-
     if (storedCart) {
       try {
         const parsedCart = JSON.parse(storedCart);
-        console.log("Parsed Cart:", parsedCart); // Debugging
         setCartItems(parsedCart);
         const total = parsedCart.reduce((sum, item) => sum + item.quantity * item.price, 0);
         setTotalPrice(total);
@@ -32,7 +29,6 @@ const Payment = () => {
     }
   }, []);
 
-  // Handle payment
   const handlePayment = async () => {
     if (!address.trim()) {
       setMessage("⚠️ Please enter your delivery address!");
@@ -54,21 +50,20 @@ const Payment = () => {
       return;
     }
 
-const orderData = {
-  customerName: storedlastName,
-  address,
-  paymentMethod: paymentMethod === "Pay by UPI" ? upiMethod : paymentMethod,
-  totalPrice,
-  items: cartItems.map(item => ({
-    itemName: item.name,     // ✅ match ItemRequest.java field
-    quantity: item.quantity,
-    price: item.price
-  }))
-};
-
+    const orderData = {
+      customerName: storedlastName,
+      address,
+      paymentMethod: paymentMethod === "Pay by UPI" ? upiMethod : paymentMethod,
+      totalPrice,
+      items: cartItems.map(item => ({
+        itemName: item.name,
+        quantity: item.quantity,
+        price: item.price
+      }))
+    };
 
     try {
-      const response = await fetch("http://localhost:8093/api/orders/place", {
+      const response = await fetch("http://localhost:8094/api/orders/place", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -78,8 +73,8 @@ const orderData = {
 
       if (response.ok) {
         setMessage(`✅ Order placed successfully! Delivery to: ${address}`);
+        setOrderPlaced(true); // ✅ NEW: show feedback
         localStorage.removeItem("cart");
-        navigate("/order-success");
       } else {
         setMessage("❌ Order failed! Please try again.");
       }
@@ -89,14 +84,23 @@ const orderData = {
     }
   };
 
+  if (orderPlaced) {
+    return (
+      <div className="payment-container">
+        <h2>{message}</h2>
+        <OrderFeedback orderedItems={cartItems} /> {/* ✅ NEW */}
+      </div>
+    );
+  }
+
   return (
     <div className="payment-container">
       <h1>Payment & Delivery Details</h1>
 
-      <textarea 
-        placeholder="Enter Address" 
-        value={address} 
-        onChange={(e) => setAddress(e.target.value)} 
+      <textarea
+        placeholder="Enter Address"
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
       ></textarea>
 
       <div className="payment-options">
@@ -140,7 +144,6 @@ const orderData = {
               />
               Google Pay (GPay)
             </label>
-
             <label>
               <input
                 type="radio"
@@ -150,7 +153,6 @@ const orderData = {
               />
               PhonePe
             </label>
-
             <label>
               <input
                 type="radio"
@@ -168,7 +170,7 @@ const orderData = {
       <ul>
         {cartItems.map((item, index) => (
           <li key={index}>
-            {item.itemName} - {item.quantity} x ₹{item.price}
+            {item.name} - {item.quantity} x ₹{item.price}
           </li>
         ))}
       </ul>
@@ -182,7 +184,6 @@ const orderData = {
       <button className="back-button" onClick={() => navigate("/cart")}>
         Back to Cart
       </button>
- 
 
       {message && <p className="payment-message">{message}</p>}
     </div>
