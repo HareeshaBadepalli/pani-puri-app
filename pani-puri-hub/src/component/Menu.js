@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./menupage.css";
+import axios from "axios";
 
 const Menu = ({ cart, setCart }) => {
   const [quantities, setQuantities] = useState({});
@@ -34,32 +35,31 @@ const Menu = ({ cart, setCart }) => {
       })
       .catch((err) => console.error("Failed to fetch menu items", err));
   }, []);
-
-  const updateAvailabilityInBackend = async (itemId, availableStatus) => {
+  const updateAvailabilityInBackend = async (itemId, currentStatus) => {
+    const endpoint = currentStatus
+      ? `http://localhost:8096/api/menu/${itemId}/disable`
+      : `http://localhost:8096/api/menu/${itemId}/enable`;
+  
     try {
-      await fetch(`http://localhost:8094/api/menu/${itemId}/disable`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ available: availableStatus }),
-      });
+      const response = await axios.put(endpoint);
+      if (response.status === 200) {
+        // Update availability in local state
+        const updated = menuItems.map(item =>
+          item.id === itemId ? { ...item, available: !currentStatus } : item
+        );
+        setMenuItems(updated);
+      }
     } catch (error) {
-      console.error("Error updating availability:", error);
+      console.error('Failed to toggle availability', error);
     }
   };
-
+  
   const handleClick = (itemId, action) => {
     if (disabledButtons[itemId]) return;
 
     setQuantities((prev) => {
       const currentQty = prev[itemId] || 0;
       const newQty = action === "increment" ? currentQty + 1 : Math.max(currentQty - 1, 0);
-
-      if (isAdmin && action === "increment") {
-        setDisabledButtons((prev) => ({ ...prev, [itemId]: true }));
-        updateAvailabilityInBackend(itemId, false);
-        return { ...prev, [itemId]: 0 };
-      }
-
       return { ...prev, [itemId]: newQty };
     });
 
@@ -154,6 +154,7 @@ const Menu = ({ cart, setCart }) => {
         {filteredItems.length > 0 ? (
           filteredItems.map((item) => {
             const isDisabled = disabledButtons[item.id];
+
             return (
               <div key={item.id} className={`menu-card ${isDisabled ? "card-disabled" : ""}`}>
                 <div className="image-wrapper">
@@ -161,13 +162,6 @@ const Menu = ({ cart, setCart }) => {
                     src={`http://localhost:8094/images/${item.imagePath}`}
                     alt={item.name}
                     className={isDisabled ? "disabled-image" : ""}
-                    onClick={() => {
-                      if (isAdmin && !isDisabled) {
-                        setDisabledButtons((prev) => ({ ...prev, [item.id]: true }));
-                        setQuantities((prev) => ({ ...prev, [item.id]: 0 }));
-                        updateAvailabilityInBackend(item.id, false);
-                      }
-                    }}
                   />
                   {isDisabled && <div className="overlay">No Items Available</div>}
                 </div>
@@ -214,20 +208,28 @@ const Menu = ({ cart, setCart }) => {
                 >
                   Add to Cart
                 </button>
-                   {isAdmin &&  (
+
+                {isAdmin && (
                   <button
                     className="re-enable-button"
                     onClick={() => {
+                      const newAvailableStatus = !isDisabled;
+
                       setDisabledButtons((prev) => {
                         const updated = { ...prev };
-                        delete updated[item.id];
+                        if (newAvailableStatus === true) {
+                          updated[item.id] = true;
+                        } else {
+                          delete updated[item.id];
+                        }
                         return updated;
                       });
+
                       setQuantities((prev) => ({ ...prev, [item.id]: 0 }));
-                      updateAvailabilityInBackend(item.id, true);
+                      updateAvailabilityInBackend(item.id, newAvailableStatus);
                     }}
                   >
-                    Re-enable
+                    {isDisabled ? "Re-enable" : "Disable"}
                   </button>
                 )}
               </div>

@@ -17,7 +17,7 @@ const Login = ({ setIsAuthenticated }) => {
     setLoading(true); // Start loading
 
     try {
-      const response = await axios.post("http://localhost:8094/api/users/login", loginData);
+      const response = await axios.post("http://localhost:8096/api/users/login", loginData);
 
       if (response.data && response.data.message === "Login successful!") {
         alert("Login successful!");
