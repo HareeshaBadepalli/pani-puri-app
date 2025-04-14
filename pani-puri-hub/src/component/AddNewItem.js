@@ -41,7 +41,7 @@ const AddNewItem = ({ editItem, onClose, onUpdated }) => {
 
       if (isUpdateMode) {
         await axios.put(
-          `http://localhost:8094/api/menu/update/${editItem.id}`,
+          `http://localhost:8093/api/menu/update/${editItem.id}`,
           data,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
@@ -49,7 +49,7 @@ const AddNewItem = ({ editItem, onClose, onUpdated }) => {
         if (onUpdated) onUpdated();
         if (onClose) onClose();
       } else {
-        await axios.post("http://localhost:8094/api/menu/add", data, {
+        await axios.post("http://localhost:8093/api/menu/add", data, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         alert("Item added successfully");

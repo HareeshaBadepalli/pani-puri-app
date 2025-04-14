@@ -17,10 +17,10 @@ const Navbar = () => {
           loggedInPassword === "Hareesha@123" && (
             <li>
               <button
-                onClick={() => navigate("/add-item")}
+                onClick={() => navigate("/admindashboard")}
                 style={styles.navLinkButton}
               >
-                Addmenuitem
+                AdminDashboard
               </button>
             </li>
           )}

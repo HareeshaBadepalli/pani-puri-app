@@ -23,7 +23,7 @@ const Menu = ({ cart, setCart }) => {
     if (storedLastName) setLastName(storedLastName);
     if (storedEmail === "badepallihareesha123@gmail.com") setIsAdmin(true);
 
-    fetch("http://localhost:8094/api/menu")
+    fetch("http://localhost:8096/api/menu")
       .then((res) => res.json())
       .then((data) => {
         setMenuItems(data);
@@ -37,8 +37,8 @@ const Menu = ({ cart, setCart }) => {
   }, []);
   const updateAvailabilityInBackend = async (itemId, currentStatus) => {
     const endpoint = currentStatus
-      ? `http://localhost:8096/api/menu/${itemId}/disable`
-      : `http://localhost:8096/api/menu/${itemId}/enable`;
+      ? `http://localhost:8093/api/menu/${itemId}/disable`
+      : `http://localhost:8093/api/menu/${itemId}/enable`;
   
     try {
       const response = await axios.put(endpoint);
@@ -159,7 +159,7 @@ const Menu = ({ cart, setCart }) => {
               <div key={item.id} className={`menu-card ${isDisabled ? "card-disabled" : ""}`}>
                 <div className="image-wrapper">
                   <img
-                    src={`http://localhost:8094/images/${item.imagePath}`}
+                    src={`http://localhost:8093/images/${item.imagePath}`}
                     alt={item.name}
                     className={isDisabled ? "disabled-image" : ""}
                   />

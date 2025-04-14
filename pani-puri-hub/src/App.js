@@ -13,6 +13,8 @@ import AuthPage from "./component/AuthPage";
 import AddMenuItem from "./component/AddMenuItem";
 import AddNewItem from "./component/AddNewItem";
 import UpdateMenuItem from "./component/UpdateMenuItem";
+import AdminDashboard from "./component/AdminDashboard";
+import OrderHistory from "./component/OrderHistory";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -43,6 +45,8 @@ function App() {
             <Route path="/menu" element={<><Navbar /><Menu cart={cart} setCart={setCart} /><Footer /></>} />
             <Route path="/cart" element={<><Navbar /><Cart cart={cart} setCart={setCart} /><Footer /></>} />
             <Route path="/payment" element={<><Navbar /><Payment /><Footer /></>} />
+            <Route path="/admindashboard" element={<AdminDashboard />} />
+            <Route path="/order-history" element={<OrderHistory />} />
 
             {/* Menu Management */}
             <Route path="/add-item" element={<AddMenuItem />} />

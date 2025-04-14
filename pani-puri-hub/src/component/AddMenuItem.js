@@ -13,7 +13,7 @@ const AddMenuItem = () => {
 
   const fetchMenuItems = async () => {
     try {
-      const res = await axios.get("http://localhost:8094/api/menu");
+      const res = await axios.get("http://localhost:8093/api/menu");
       setMenuItems(res.data);
     } catch (err) {
       console.error("Error fetching items", err);
@@ -22,7 +22,7 @@ const AddMenuItem = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8094/api/menu/delete/${id}`);
+      await axios.delete(`http://localhost:8093/api/menu/delete/${id}`);
       fetchMenuItems();
     } catch (err) {
       console.error("Error deleting item", err);
@@ -60,7 +60,7 @@ const AddMenuItem = () => {
               <td>
   {item.imagePath ? (
     <img
-  src={`http://localhost:8094/images/${item.imagePath}`} 
+  src={`http://localhost:8093/images/${item.imagePath}`} 
   alt="menu item" 
   style={{ width: '100px' }}
 />

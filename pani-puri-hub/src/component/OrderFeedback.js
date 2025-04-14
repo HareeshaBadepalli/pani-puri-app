@@ -27,7 +27,7 @@ const OrderFeedback = ({ orderedItems }) => {
   const handleSubmit = async () => {
     try {
       for (const fb of feedbacks) {
-        const response = await fetch("http://localhost:8094/api/feedback/submit", {
+        const response = await fetch("http://localhost:8093/api/feedback/submit", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -55,7 +55,7 @@ const OrderFeedback = ({ orderedItems }) => {
           <h4>{item.name || item.itemName}</h4>
           {item.imagePath && (
             <img
-              src={`http://localhost:8094/images/${item.imagePath}`}
+              src={`http://localhost:8093/images/${item.imagePath}`}
               alt={item.itemName}
               className="feedback-image"
             />
