@@ -1,0 +1,29 @@
+.admin-dashboard-box {
+  background-color: rgba(140, 103, 103, 0.9);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 300px;
+}
+
+.admin-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.admin-btn {
+  padding: 12px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.admin-btn:hover {
+  background-color: #218838;
+}

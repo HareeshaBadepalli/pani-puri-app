@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import OrderFeedback from "./OrderFeedback";
+
 import "./payment.css";
-import OrderFeedback from "./OrderFeedback"; // ✅ NEW: import feedback component
+
 
 const Payment = () => {
   const [address, setAddress] = useState("");
@@ -10,7 +12,10 @@ const Payment = () => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [message, setMessage] = useState("");
-  const [orderPlaced, setOrderPlaced] = useState(false); // ✅ NEW
+  const [orderPlaced, setOrderPlaced] = useState(false);
+  const [orderedItems, setOrderedItems] = useState([]);
+
+
   const navigate = useNavigate();
 
   const storedlastName = localStorage.getItem("lastName");
@@ -19,34 +24,40 @@ const Payment = () => {
     const storedCart = localStorage.getItem("cart");
     if (storedCart) {
       try {
-        const parsedCart = JSON.parse(storedCart);
-        setCartItems(parsedCart);
-        const total = parsedCart.reduce((sum, item) => sum + item.quantity * item.price, 0);
+        const cartObject = JSON.parse(storedCart);
+        const cartArray = Object.values(cartObject);
+        setCartItems(cartArray);
+        const total = cartArray.reduce(
+          (sum, item) => sum + item.quantity * item.price,
+          0
+        );
         setTotalPrice(total);
       } catch (error) {
-        console.error("Error parsing cart data:", error);
+        console.error("Error parsing cart:", error);
+        setCartItems([]);
+        setTotalPrice(0);
       }
     }
   }, []);
 
   const handlePayment = async () => {
     if (!address.trim()) {
-      setMessage("⚠️ Please enter your delivery address!");
+      setMessage("⚠️ Please enter your address.");
       return;
     }
 
     if (!paymentMethod) {
-      setMessage("⚠️ Please select a payment method!");
+      setMessage("⚠️ Please select a payment method.");
       return;
     }
 
     if (paymentMethod === "Pay by UPI" && !upiMethod) {
-      setMessage("⚠️ Please select a UPI method!");
+      setMessage("⚠️ Please select a UPI method.");
       return;
     }
 
     if (cartItems.length === 0) {
-      setMessage("⚠️ Your cart is empty! Add items before proceeding.");
+      setMessage("⚠️ Your cart is empty.");
       return;
     }
 
@@ -55,15 +66,15 @@ const Payment = () => {
       address,
       paymentMethod: paymentMethod === "Pay by UPI" ? upiMethod : paymentMethod,
       totalPrice,
-      items: cartItems.map(item => ({
+      items: cartItems.map((item) => ({
         itemName: item.name,
         quantity: item.quantity,
-        price: item.price
-      }))
+        price: item.price,
+      })),
     };
 
     try {
-      const response = await fetch("http://localhost:8093/api/orders/place", {
+      const response = await fetch("http://localhost:8090/api/orders/place", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -72,39 +83,40 @@ const Payment = () => {
       });
 
       if (response.ok) {
-        setMessage(`✅ Order placed successfully! Delivery to: ${address}`);
-        setOrderPlaced(true); // ✅ NEW: show feedback
+        setMessage("✅ Order placed successfully!");
+        setOrderPlaced(true);
+        setOrderedItems(cartItems); // Store for feedback
         localStorage.removeItem("cart");
       } else {
-        setMessage("❌ Order failed! Please try again.");
+        setMessage("❌ Failed to place order. Try again.");
       }
     } catch (error) {
-      console.error("Error placing order:", error);
-      setMessage("❌ Something went wrong! Please try again.");
+      console.error("Payment error:", error);
+      setMessage("❌ Something went wrong.");
     }
   };
-
   if (orderPlaced) {
     return (
       <div className="payment-container">
         <h2>{message}</h2>
-        <OrderFeedback orderedItems={cartItems} /> {/* ✅ NEW */}
+        <OrderFeedback orderedItems={orderedItems} />
+        <button onClick={() => navigate("/")}>Go to Home</button>
       </div>
     );
   }
-
+  
   return (
     <div className="payment-container">
-      <h1>Payment & Delivery Details</h1>
+      <h1>Payment & Delivery</h1>
 
       <textarea
-        placeholder="Enter Address"
+        placeholder="Enter Delivery Address"
         value={address}
         onChange={(e) => setAddress(e.target.value)}
       ></textarea>
 
       <div className="payment-options">
-        <h3>Payment Method</h3>
+        <h3>Choose Payment Method</h3>
         <label>
           <input
             type="radio"
@@ -113,7 +125,6 @@ const Payment = () => {
             onChange={(e) => {
               setPaymentMethod(e.target.value);
               setUpiMethod("");
-              setMessage("");
             }}
           />
           Cash on Delivery
@@ -127,7 +138,6 @@ const Payment = () => {
             onChange={(e) => {
               setPaymentMethod(e.target.value);
               setUpiMethod("");
-              setMessage("");
             }}
           />
           Pay by UPI
@@ -142,7 +152,7 @@ const Payment = () => {
                 value="Google Pay"
                 onChange={(e) => setUpiMethod(e.target.value)}
               />
-              Google Pay (GPay)
+              Google Pay
             </label>
             <label>
               <input
@@ -177,13 +187,8 @@ const Payment = () => {
 
       <h3>Total: ₹{totalPrice}</h3>
 
-      <button className="pay-now-button" onClick={handlePayment}>
-        Pay Now
-      </button>
-
-      <button className="back-button" onClick={() => navigate("/cart")}>
-        Back to Cart
-      </button>
+      <button onClick={handlePayment}>Pay Now</button>
+      <button onClick={() => navigate("/cart")}>Back to Cart</button>
 
       {message && <p className="payment-message">{message}</p>}
     </div>

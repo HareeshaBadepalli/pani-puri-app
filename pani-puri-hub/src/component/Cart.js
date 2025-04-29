@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./cart.css";
 
 const Cart = ({ cart, setCart }) => {
   const navigate = useNavigate();
+
+  // Automatically sync cart to localStorage on change
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
 
   const totalCost = Object.values(cart).reduce(
     (total, item) => total + item.quantity * item.price,
@@ -44,7 +49,7 @@ const Cart = ({ cart, setCart }) => {
         <div className="cart-items">
           {Object.values(cart).map((item) => (
             <div key={item.id} className="cart-card">
-             <img src={`/images/${item.imagePath}`} alt={item.name} className="item-image" />
+<img src={`/images/${item.imagePath}`} alt={item.name} className="item-image" />
 
               <div className="cart-details">
                 <h3>{item.name}</h3>
@@ -70,7 +75,7 @@ const Cart = ({ cart, setCart }) => {
       <button
         className="pay-button"
         onClick={() => {
-          localStorage.setItem("cart", JSON.stringify(Object.values(cart)));
+          localStorage.setItem("cart", JSON.stringify(cart));
           navigate("/payment");
         }}
       >

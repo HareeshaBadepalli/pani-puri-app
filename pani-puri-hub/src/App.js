@@ -15,6 +15,8 @@ import AddNewItem from "./component/AddNewItem";
 import UpdateMenuItem from "./component/UpdateMenuItem";
 import AdminDashboard from "./component/AdminDashboard";
 import OrderHistory from "./component/OrderHistory";
+import ReorderPage from "./component/ReorderPage";
+import ReviewList from "./component/ReviewList";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -47,6 +49,10 @@ function App() {
             <Route path="/payment" element={<><Navbar /><Payment /><Footer /></>} />
             <Route path="/admindashboard" element={<AdminDashboard />} />
             <Route path="/order-history" element={<OrderHistory />} />
+            <Route path="/reorder" element={<ReorderPage />} />
+            <Route path="/reviews" element={<ReviewList />} />
+
+
 
             {/* Menu Management */}
             <Route path="/add-item" element={<AddMenuItem />} />

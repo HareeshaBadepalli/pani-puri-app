@@ -35,6 +35,18 @@ const Navbar = () => {
             Menu
           </button>
         </li>
+        
+        {loggedInEmail && loggedInPassword && (
+          <li>
+            <button
+              onClick={() => navigate("/reorder")} // Make sure this points to the page that shows past orders and reorder functionality
+              style={styles.navLinkButton}
+            >
+              Reorder
+            </button>
+          </li>
+        )}
+
         <li>
           <button onClick={() => navigate("/login")} style={styles.navLinkButton}>
             Signout

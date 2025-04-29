@@ -6,7 +6,7 @@ const MiddleSection = () => {
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:8093/api/feedback/all")
+    axios.get("http://localhost:8090/api/feedback/all")
       .then((res) => {
         setReviews(res.data);
       })

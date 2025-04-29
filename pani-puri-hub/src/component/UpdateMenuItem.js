@@ -19,7 +19,7 @@ const UpdateMenuItem = () => {
     if (location.state && location.state.item) {
       setItem(location.state.item);
       if (location.state.item.imagePath) {
-        setPreview(`http://localhost:8093/images/${location.state.item.imagePath}`);
+        setPreview(`http://localhost:8090/images/${location.state.item.imagePath}`);
       }
     } else {
       alert("No item data found.");
@@ -53,7 +53,7 @@ const UpdateMenuItem = () => {
 
     try {
       await axios.put(
-        `http://localhost:8093/api/menu/update/${item.id}`,
+        `http://localhost:8090/api/menu/update/${item.id}`,
         formData,
         {
           headers: {
