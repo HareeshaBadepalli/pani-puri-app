@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import api from '../api/apiService';  // Import the apiService
 import './AddNewItem.css';
 
 const AddNewItem = ({ editItem, onClose, onUpdated }) => {
@@ -11,6 +13,12 @@ const AddNewItem = ({ editItem, onClose, onUpdated }) => {
     stock: "",
     image: null,
   });
+   
+  const navigate = useNavigate();
+
+const goBackToitem = () => {
+  navigate("/add-item"); // or replace with the correct route
+};
 
   useEffect(() => {
     if (isUpdateMode && editItem) {
@@ -40,18 +48,12 @@ const AddNewItem = ({ editItem, onClose, onUpdated }) => {
       if (formData.image) data.append("image", formData.image);
 
       if (isUpdateMode) {
-        await axios.put(
-          `http://localhost:8090/api/menu/update/${editItem.id}`,
-          data,
-          { headers: { "Content-Type": "multipart/form-data" } }
-        );
+        await api.updateMenuItem(editItem.id, data); // Call the update function from apiService
         alert("Item updated successfully");
         if (onUpdated) onUpdated();
         if (onClose) onClose();
       } else {
-        await axios.post("http://localhost:8090/api/menu/add", data, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        await api.addMenuItem(data); // Call the add function from apiService
         alert("Item added successfully");
         window.location.href = "/add-item";
       }
@@ -63,6 +65,9 @@ const AddNewItem = ({ editItem, onClose, onUpdated }) => {
 
   return (
     <div className={isUpdateMode ? "modal" : "add-new-form"}>
+<button onClick={goBackToitem} className="back-button">
+  ← Back to Menu Items
+</button>
       <h2>{isUpdateMode ? "Update Item" : "Add New Menu Item"}</h2>
       <input
         type="text"

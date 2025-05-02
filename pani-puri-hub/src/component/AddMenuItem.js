@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from '../api/apiService';
+import axios from 'axios';
 import "./AddMenuItem.css";
 
 const AddMenuItem = () => {
@@ -13,7 +14,7 @@ const AddMenuItem = () => {
 
   const fetchMenuItems = async () => {
     try {
-      const res = await axios.get("http://localhost:8090/api/menu");
+      const res = await api.getMenuItems();
       setMenuItems(res.data);
     } catch (err) {
       console.error("Error fetching items", err);
@@ -22,7 +23,7 @@ const AddMenuItem = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8090/api/menu/delete/${id}`);
+      await api.deleteMenuItem(id);
       fetchMenuItems();
     } catch (err) {
       console.error("Error deleting item", err);
@@ -60,8 +61,8 @@ const AddMenuItem = () => {
               <td>
   {item.imagePath ? (
     <img
-  src={`http://localhost:8090/images/${item.imagePath}`} 
-  alt="menu item" 
+    src={api.getImageUrl(item.imagePath)}
+    alt="menu item" 
   style={{ width: '100px' }}
 />
   ) : (

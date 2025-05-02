@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/apiService"; // ✅ Using centralized API service
 
 const UpdateMenuItem = () => {
   const location = useLocation();
@@ -19,7 +19,7 @@ const UpdateMenuItem = () => {
     if (location.state && location.state.item) {
       setItem(location.state.item);
       if (location.state.item.imagePath) {
-        setPreview(`http://localhost:8090/images/${location.state.item.imagePath}`);
+        setPreview(api.getImageUrl(location.state.item.imagePath));
       }
     } else {
       alert("No item data found.");
@@ -52,15 +52,7 @@ const UpdateMenuItem = () => {
     }
 
     try {
-      await axios.put(
-        `http://localhost:8090/api/menu/update/${item.id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data"
-          }
-        }
-      );
+      await api.updateMenuItemWithImage(item.id, formData);
       alert("Item updated successfully");
       navigate("/add-item");
     } catch (error) {

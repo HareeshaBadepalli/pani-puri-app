@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../api/apiService"; // adjust path if needed
 import { useNavigate } from "react-router-dom";
 import "./signup.css"; // Import external CSS
 
@@ -21,7 +21,7 @@ const Signing = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8090/api/users/signing", user);
+    await api.signup(user)
       alert("Signup successful! Please log in.");
       navigate("/login");
     } catch (error) {

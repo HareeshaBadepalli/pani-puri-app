@@ -69,3 +69,16 @@
     object-fit: cover;
   }
   
+  .filter-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+  }
+  
+  .filter-controls select,
+  .filter-controls input {
+    padding: 6px;
+    font-size: 14px;
+  }
+  

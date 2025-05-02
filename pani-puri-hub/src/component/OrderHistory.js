@@ -1,6 +1,5 @@
-// OrderHistory.js
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/apiService';
 import './OrderHistory.css';
 import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -20,7 +19,7 @@ const OrderHistory = () => {
 
   const fetchAllOrders = async () => {
     try {
-      const response = await axios.get('http://localhost:8090/api/orders/all');
+      const response = await api.getOrders();
       setOrders(response.data);
       setSearchTerm('');
       clearFilters();

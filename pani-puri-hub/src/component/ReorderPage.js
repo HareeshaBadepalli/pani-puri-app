@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from '../api/apiService';
 import "./ReorderPage.css";
 
 const ReorderPage = () => {
@@ -11,6 +12,7 @@ const ReorderPage = () => {
   const customerName = localStorage.getItem("lastName");
   const navigate = useNavigate();
 
+  // Format order date to a readable format
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString();
@@ -21,8 +23,9 @@ const ReorderPage = () => {
       setLoading(true);
       setError(null);
 
-      const fetchOrders = axios.get(`http://localhost:8090/api/orders/by-customer-name?name=${customerName}`);
-      const fetchMenuItems = axios.get("http://localhost:8090/api/menu");
+      const fetchOrders = api.getOrdersByCustomerName(customerName);
+      const fetchMenuItems = api.getMenuItems();
+
 
       Promise.all([fetchOrders, fetchMenuItems])
         .then(([ordersRes, menuItemsRes]) => {
@@ -38,32 +41,36 @@ const ReorderPage = () => {
     }
   }, [customerName]);
 
+  // Get the image path for the item from the menu
   const getImageForItem = (itemName) => {
     const item = menuItems.find(m => m.name.trim().toLowerCase() === itemName.trim().toLowerCase());
-    return item?.imagePath || "default.jpg";
+    return item?.imagePath || "default.jpg"; // Default image if no match
   };
 
+  // Handle reorder and add items to the cart
   const handleReorder = (order) => {
-    const cartItemsArray = order.items?.map((item) => ({
+    // Check if the order has items
+    if (!order.items || order.items.length === 0) {
+      alert("No items found in this order.");
+      return;
+    }
+
+    // Map items from order to the cart format
+    const cartItemsArray = order.items.map((item) => ({
       name: item.itemName,
       price: item.price,
       quantity: item.quantity,
-      imagePath: getImageForItem(item.itemName), // also include image if needed
+      imagePath: getImageForItem(item.itemName) || "default.jpg", // Default image fallback
     }));
-  
-    // Convert array to object with item.id as keys
-    const cartItemsObj = {};
-    cartItemsArray.forEach((item) => {
-      cartItemsObj[item.name] = item;
-    });
-  
-    // Save the correct format in localStorage
-    localStorage.setItem("cart", JSON.stringify(cartItemsObj));
-  
-    // Navigate to cart page
+
+    console.log("Reordering items:", cartItemsArray);  // Debugging log
+
+    // Store the reordered items in localStorage
+    localStorage.setItem("cart", JSON.stringify(cartItemsArray));
+
+    // Navigate to the Cart page
     navigate("/cart");
   };
-  
 
   return (
     <div className="reorder-container">
@@ -103,8 +110,8 @@ const ReorderPage = () => {
                   )}
                   <td>
                     <img
-                      src={`http://localhost:8090/images/${getImageForItem(item.itemName)}`}
-                      alt={item.itemName}
+                   src={api.getImageUrl(getImageForItem(item.itemName))}
+                   alt={item.itemName}
                       className="reorder-image"
                     />
                   </td>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
+import api from '../api/apiService';
 import "./OrderFeedback.css";
 
 const OrderFeedback = ({ orderedItems }) => {
@@ -36,19 +37,14 @@ const OrderFeedback = ({ orderedItems }) => {
   const handleSubmit = async () => {
     try {
       for (const fb of feedbacks) {
-        const response = await fetch("http://localhost:8090/api/feedback/submit", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(fb),
-        });
-
-        if (!response.ok) {
+        // Use the API service instead of fetch
+        const response = await api.submitFeedback(fb);
+  
+        // Handle errors if needed
+        if (response.status !== 200) {
           throw new Error(`Failed to submit feedback for ${fb.itemName}`);
         }
       }
-
       setMessage("✅ Thank you for your feedback!");
     } catch (error) {
       console.error("Error submitting feedback:", error);
@@ -64,7 +60,7 @@ const OrderFeedback = ({ orderedItems }) => {
           <h4>{fb.itemName}</h4>
           {fb.imagePath && (
             <img
-              src={`http://localhost:8090/images/${fb.imagePath}`}
+            src={api.getImageUrl(fb.imagePath)} // Use the api helper method
               alt={fb.itemName}
               className="feedback-image"
             />

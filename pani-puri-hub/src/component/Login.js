@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../api/apiService";
 import "./login.css";
 
 const Login = ({ setIsAuthenticated }) => {
@@ -17,7 +17,7 @@ const Login = ({ setIsAuthenticated }) => {
     setLoading(true); // Start loading
 
     try {
-      const response = await axios.post("http://localhost:8090/api/users/login", loginData);
+      const response = await api.login(loginData);
 
       if (response.data && response.data.message === "Login successful!") {
         alert("Login successful!");

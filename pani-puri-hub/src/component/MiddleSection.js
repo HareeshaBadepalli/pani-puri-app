@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./MiddleSection.css";
-import axios from "axios";
+import api from '../api/apiService';
 
 const MiddleSection = () => {
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:8090/api/feedback/all")
-      .then((res) => {
+    api.getAllFeedback()
+    .then((res) => {
         setReviews(res.data);
       })
       .catch((err) => console.error("Error fetching reviews:", err));

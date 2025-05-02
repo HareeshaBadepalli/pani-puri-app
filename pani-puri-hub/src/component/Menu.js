@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./menupage.css";
 import axios from "axios";
+import api from '../api/apiService'
 
 const Menu = ({ cart, setCart }) => {
   const [quantities, setQuantities] = useState({});
@@ -22,37 +23,36 @@ const Menu = ({ cart, setCart }) => {
     const storedEmail = localStorage.getItem("email");
     if (storedLastName) setLastName(storedLastName);
     if (storedEmail === "badepallihareesha123@gmail.com") setIsAdmin(true);
+    api.getMenuItems()
+    .then((response) => {
+      const data = response.data;
+      setMenuItems(data);
+      const disabledMap = {};
+      data.forEach((item) => {
+        if (!item.available) disabledMap[item.id] = true;
+      });
+      setDisabledButtons(disabledMap);
+    })
+    .catch((err) => console.error("Error fetching menu items", err));
+}, []);
 
-    fetch("http://localhost:8090/api/menu")
-      .then((res) => res.json())
-      .then((data) => {
-        setMenuItems(data);
-        const disabledMap = {};
-        data.forEach((item) => {
-          if (!item.available) disabledMap[item.id] = true;
-        });
-        setDisabledButtons(disabledMap);
-      })
-      .catch((err) => console.error("Failed to fetch menu items", err));
-  }, []);
-  const updateAvailabilityInBackend = async (itemId, currentStatus) => {
-    const endpoint = currentStatus
-      ? `http://localhost:8090/api/menu/${itemId}/disable`
-      : `http://localhost:8090/api/menu/${itemId}/enable`;
-  
-    try {
-      const response = await axios.put(endpoint);
-      if (response.status === 200) {
-        // Update availability in local state
-        const updated = menuItems.map(item =>
-          item.id === itemId ? { ...item, available: !currentStatus } : item
-        );
-        setMenuItems(updated);
-      }
-    } catch (error) {
-      console.error('Failed to toggle availability', error);
+const updateAvailabilityInBackend = async (itemId, currentStatus) => {
+  try {
+    if (currentStatus) {
+      await api.disableMenuItem(itemId);
+    } else {
+      await api.enableMenuItem(itemId);
     }
-  };
+
+    const updatedItems = menuItems.map((item) =>
+      item.id === itemId ? { ...item, available: !currentStatus } : item
+    );
+    setMenuItems(updatedItems);
+  } catch (error) {
+    console.error("Error updating availability", error);
+  }
+};
+
   
   const handleClick = (itemId, action) => {
     if (disabledButtons[itemId]) return;
@@ -158,8 +158,8 @@ const Menu = ({ cart, setCart }) => {
             return (
               <div key={item.id} className={`menu-card ${isDisabled ? "card-disabled" : ""}`}>
                 <div className="image-wrapper">
-                  <img
-                    src={`http://localhost:8090/images/${item.imagePath}`}
+                    <img
+                    src={api.getImageUrl(item.imagePath)}
                     alt={item.name}
                     className={isDisabled ? "disabled-image" : ""}
                   />
