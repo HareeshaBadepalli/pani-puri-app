@@ -1,13 +1,13 @@
 import axios from "axios";
 
 // Base URL — update this once if the port or host changes
-const BASE_URL = "http://localhost:8090";
+const BASE_URL = "http://localhost:8091";
 const IMAGE_BASE_URL = `${BASE_URL}/images`;
 
 const api = {
   // 🧑 User APIs
   login: (loginData) => axios.post(`${BASE_URL}/api/users/login`, loginData),
-  signup: (userData) => axios.post(`${BASE_URL}/api/users/signup`, userData),
+  signup: (userData) => axios.post(`${BASE_URL}/api/users/signing`, userData),
 
   // 🍽️ Menu APIs
   getMenuItems: () => axios.get(`${BASE_URL}/api/menu`),

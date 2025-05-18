@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import api from '../api/apiService';  // Import the apiService
 import './AddNewItem.css';
@@ -14,8 +13,7 @@ const AddNewItem = ({ editItem, onClose, onUpdated }) => {
     image: null,
   });
    
-  const navigate = useNavigate();
-
+const navigate = useNavigate();
 const goBackToitem = () => {
   navigate("/add-item"); // or replace with the correct route
 };
@@ -65,9 +63,9 @@ const goBackToitem = () => {
 
   return (
     <div className={isUpdateMode ? "modal" : "add-new-form"}>
-<button onClick={goBackToitem} className="back-button">
+    <button onClick={goBackToitem} className="back-button">
   ← Back to Menu Items
-</button>
+    </button>
       <h2>{isUpdateMode ? "Update Item" : "Add New Menu Item"}</h2>
       <input
         type="text"

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from '../api/apiService';
 import "./ReorderPage.css";
@@ -25,8 +24,7 @@ const ReorderPage = () => {
 
       const fetchOrders = api.getOrdersByCustomerName(customerName);
       const fetchMenuItems = api.getMenuItems();
-
-
+      
       Promise.all([fetchOrders, fetchMenuItems])
         .then(([ordersRes, menuItemsRes]) => {
           setOrders(ordersRes.data);
@@ -49,28 +47,30 @@ const ReorderPage = () => {
 
   // Handle reorder and add items to the cart
   const handleReorder = (order) => {
-    // Check if the order has items
-    if (!order.items || order.items.length === 0) {
-      alert("No items found in this order.");
-      return;
-    }
+  if (!order.items || order.items.length === 0) {
+    alert("No items found in this order.");
+    return;
+  }
 
-    // Map items from order to the cart format
-    const cartItemsArray = order.items.map((item) => ({
+  const cartItemsObj = {};
+  order.items.forEach((item) => {
+    const imagePath = getImageForItem(item.itemName) || "default.jpg";
+    cartItemsObj[item.itemId] = {
+      id: item.itemId,
       name: item.itemName,
       price: item.price,
       quantity: item.quantity,
-      imagePath: getImageForItem(item.itemName) || "default.jpg", // Default image fallback
-    }));
+      imagePath: imagePath ,
+    };
+  });
 
-    console.log("Reordering items:", cartItemsArray);  // Debugging log
+  // Store in localStorage
+  localStorage.setItem("cart", JSON.stringify(cartItemsObj));
 
-    // Store the reordered items in localStorage
-    localStorage.setItem("cart", JSON.stringify(cartItemsArray));
+  // Navigate to cart page
+  navigate("/cart");
+};
 
-    // Navigate to the Cart page
-    navigate("/cart");
-  };
 
   return (
     <div className="reorder-container">

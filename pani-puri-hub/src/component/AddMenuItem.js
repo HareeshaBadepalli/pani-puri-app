@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from '../api/apiService';
-import axios from 'axios';
 import "./AddMenuItem.css";
 
 const AddMenuItem = () => {
@@ -36,7 +35,7 @@ const AddMenuItem = () => {
 
   return (
     <div className="add-container">
-    <button className="back-btn" onClick={() => navigate('/menu')}>
+    <button className="back-btn" onClick={() => navigate('/admindashboard')}>
         Back
       </button>     
        <h2 className="heading-table">Add New Menu Item</h2>

@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import OrderFeedback from "./OrderFeedback";
 
-import "./payment.css";
-
+import "./payment.css"; // We'll also enhance this CSS slightly below
 
 const Payment = () => {
   const [address, setAddress] = useState("");
@@ -15,9 +14,7 @@ const Payment = () => {
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [orderedItems, setOrderedItems] = useState([]);
 
-
   const navigate = useNavigate();
-
   const storedlastName = localStorage.getItem("lastName");
 
   useEffect(() => {
@@ -74,7 +71,7 @@ const Payment = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:8090/api/orders/place", {
+      const response = await fetch("http://localhost:8091/api/orders/place", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -85,7 +82,7 @@ const Payment = () => {
       if (response.ok) {
         setMessage("✅ Order placed successfully!");
         setOrderPlaced(true);
-        setOrderedItems(cartItems); // Store for feedback
+        setOrderedItems(cartItems);
         localStorage.removeItem("cart");
       } else {
         setMessage("❌ Failed to place order. Try again.");
@@ -95,16 +92,18 @@ const Payment = () => {
       setMessage("❌ Something went wrong.");
     }
   };
+
   if (orderPlaced) {
     return (
       <div className="payment-container">
+        <div className="success-animation">🌸🌸🌸</div>
         <h2>{message}</h2>
         <OrderFeedback orderedItems={orderedItems} />
         <button onClick={() => navigate("/")}>Go to Home</button>
       </div>
     );
   }
-  
+
   return (
     <div className="payment-container">
       <h1>Payment & Delivery</h1>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-
 import Navbar from "./component/Navbar";
 import Footer from "./component/Footer";
 import MiddleSection from "./component/MiddleSection";
@@ -51,10 +50,6 @@ function App() {
             <Route path="/order-history" element={<OrderHistory />} />
             <Route path="/reorder" element={<ReorderPage />} />
             <Route path="/reviews" element={<ReviewList />} />
-        
-
-
-
             {/* Menu Management */}
             <Route path="/add-item" element={<AddMenuItem />} />
             <Route path="/add-new-item" element={<AddNewItem />} />

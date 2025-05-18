@@ -1,10 +1,9 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./auth.css";  // Styling
 
+
 const AuthPage = () => {
   const navigate = useNavigate();
-
   return (
     <div className="auth-container">
       <div className="auth-box">
