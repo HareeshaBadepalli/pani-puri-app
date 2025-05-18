@@ -1,0 +1,54 @@
+/* Full page background */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    background: linear-gradient(to right,blue, #28a745); /* Gradient background */
+}
+
+/* Centered box */
+.auth-box {
+    background: rgb(225, 123, 123);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 350px;
+}
+
+/* Title styling */
+.auth-box h2 {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 30px;
+}
+
+/* Buttons styling */
+.auth-box button {
+    width: 100%;
+    margin: 10px 0;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.auth-box button:first-child {
+    background-color: #007bff;
+    color: white;
+}
+
+.auth-box button:last-child {
+    background-color: #28a745;
+    color: white;
+}
+
+.auth-box button:hover {
+    opacity: 0.8;
+}
+ .p{
+    font-size: 35px;
+ }

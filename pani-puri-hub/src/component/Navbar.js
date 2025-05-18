@@ -1,14 +1,57 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
+  // Get email and password from localStorage
+  const loggedInEmail = localStorage.getItem("email");
+  const loggedInPassword = localStorage.getItem("password");
+
   return (
     <nav style={styles.navbar}>
       <h1 style={styles.logo}>Sri Durga Chat Bandar</h1>
       <ul style={styles.navLinks}>
-        <li><a href="/" style={styles.navLink}>Home</a></li>
-        <li><a href="/menu" style={styles.navLink}>Menu</a></li>
-        <li><a href="/contact" style={styles.navLink}>Contact</a></li>
-        <li><a href="/order" style={styles.orderButton}>Order Online</a></li>
+        {/* Conditionally render Addmenuitem button only for specific user */}
+        {loggedInEmail === "badepallihareesha123@gmail.com" &&
+          loggedInPassword === "Hareesha@123" && (
+            <li>
+              <button
+                onClick={() => navigate("/admindashboard")}
+                style={styles.navLinkButton}
+              >
+                AdminDashboard
+              </button>
+            </li>
+          )}
+
+        <li>
+          <button onClick={() => navigate("/home")} style={styles.navLinkButton}>
+            Home
+          </button>
+        </li>
+        <li>
+          <button onClick={() => navigate("/menu")} style={styles.navLinkButton}>
+            Menu
+          </button>
+        </li>
+        
+        {loggedInEmail && loggedInPassword && (
+          <li>
+            <button
+              onClick={() => navigate("/reorder")} // Make sure this points to the page that shows past orders and reorder functionality
+              style={styles.navLinkButton}
+            >
+              Reorder
+            </button>
+          </li>
+        )}
+
+        <li>
+          <button onClick={() => navigate("/login")} style={styles.navLinkButton}>
+            Signout
+          </button>
+        </li>
       </ul>
     </nav>
   );
@@ -32,39 +75,22 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    textShadow: "2px 2px 8px rgba(0, 0, 0, 0.3)"
+    textShadow: "2px 2px 8px rgba(0, 0, 0, 0.3)",
   },
   navLinks: {
     listStyle: "none",
     display: "flex",
     gap: "20px",
   },
-  navLink: {
-    textDecoration: "none",
-    color: "#222",
+  navLinkButton: {
+    background: "none",
+    border: "none",
     fontSize: "20px",
     fontWeight: "bold",
+    cursor: "pointer",
+    color: "#222",
     transition: "color 0.3s ease",
   },
-  orderButton: {
-    backgroundColor: "#d10000",
-    color: "white",
-    padding: "10px 18px",
-    borderRadius: "8px",
-    textDecoration: "none",
-    fontWeight: "bold",
-    fontSize: "18px",
-    transition: "all 0.3s ease",
-    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.2)",
-  },
-};
-
-// Adding hover effects using JavaScript
-styles.navLink[":hover"] = { color: "#ff6600" };
-styles.orderButton[":hover"] = {
-  backgroundColor: "#ff0000",
-  transform: "scale(1.05)",
-  boxShadow: "0px 6px 12px rgba(255, 0, 0, 0.5)",
 };
 
 export default Navbar;
