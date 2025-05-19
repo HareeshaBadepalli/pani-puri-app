@@ -45,37 +45,46 @@ const ReorderPage = () => {
     return item?.imagePath || "default.jpg"; // Default image if no match
   };
 
-  // Handle reorder and add items to the cart
-  const handleReorder = (order) => {
+ const handleReorder = (order) => {
   if (!order.items || order.items.length === 0) {
     alert("No items found in this order.");
     return;
   }
 
-  const cartItemsObj = {};
-  order.items.forEach((item) => {
+  const cartItems = order.items.map((item) => {
     const imagePath = getImageForItem(item.itemName) || "default.jpg";
-    cartItemsObj[item.itemId] = {
-      id: item.itemId,
+    return {
+      id: item.id,
       name: item.itemName,
       price: item.price,
       quantity: item.quantity,
-      imagePath: imagePath ,
+      imagePath: imagePath,
     };
   });
 
-  // Store in localStorage
-  localStorage.setItem("cart", JSON.stringify(cartItemsObj));
+  console.log("Reorder Cart Items (array):", cartItems);
 
-  // Navigate to cart page
+  // Save to localStorage
+  localStorage.setItem("cart", JSON.stringify(cartItems));
+
+  // Confirm what was saved
+  const savedCart = JSON.parse(localStorage.getItem("cart"));
+  console.log("Saved to localStorage:", savedCart);
+
+  // Navigate to cart
   navigate("/cart");
 };
 
 
+
   return (
     <div className="reorder-container">
+    <div className="reorder-header">
+      <button className="back-button" onClick={() => navigate("/home")}>
+        ← Back to Home
+      </button>
       <h2 className="reorder-title">Your Previous Orders</h2>
-
+    </div>
       {loading ? (
         <p>Loading previous orders...</p>
       ) : error ? (

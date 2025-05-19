@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import api from "../api/apiService"; // adjust path if needed
+import api from "../api/apiService";
 import { useNavigate } from "react-router-dom";
-import "./signup.css"; // Import external CSS
+import "./signup.css";
 
 const Signing = () => {
   const [user, setUser] = useState({
@@ -21,16 +21,14 @@ const Signing = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Check if password and confirmPassword match before sending
     if (user.password !== user.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
 
     try {
-      const response = await api.signup(user); // Assuming api.signup uses axios.post
-      alert(response.data); // e.g., "Signup successful!"
+      const response = await api.signup(user);
+      alert(response.data);
       navigate("/login");
     } catch (error) {
       if (error.response && error.response.status === 409) {
@@ -39,6 +37,11 @@ const Signing = () => {
         alert("Signup failed. Please try again.");
       }
     }
+  };
+
+  // 🔙 Back to Login button click handler
+  const handleBackToLogin = () => {
+    navigate("/login");
   };
 
   return (
@@ -96,6 +99,11 @@ const Signing = () => {
           />
           <button type="submit">Sign Up</button>
         </form>
+
+        {/* 🔙 Back to Login Button */}
+        <button onClick={handleBackToLogin} className="back-login-button">
+          🔙 Back to Login
+        </button>
       </div>
     </div>
   );

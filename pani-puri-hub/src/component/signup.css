@@ -48,7 +48,7 @@
     width: 100%;
     padding: 12px;
     font-size: 16px;
-    background: #ff6f61;
+    background: #cb9cd1;
     color: white;
     border: none;
     border-radius: 8px;
@@ -58,6 +58,20 @@
   }
   
   .signup-box button:hover {
-    background: #e64a45;
+    background: #8e7473;
   }
   
+  .back-login-button {
+  margin-top: 15px;
+  background-color: #7a8e9f;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.back-login-button:hover {
+  background-color: #5a6268;
+}
